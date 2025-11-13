@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Check branch name format
         run: |
-          BRANCH_NAME="${{ github.head_ref }}"
+          BRANCH_NAME=${{ github.head_ref }}
           REGEXP='^(setting|feat|fix|docs|style|refactor|chore|deploy)/#[0-9]+/[a-z0-9-]+$'
           
           echo "Checking branch name: $BRANCH_NAME"
