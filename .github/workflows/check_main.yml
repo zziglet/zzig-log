@@ -34,7 +34,7 @@ jobs:
       
       # 4. 의존성 설치
       - name: 'Install dependencies'
-        run: pnpm ci
+        run: pnpm install
 
       # 5. Lint 실행
       - name: 'Run Lint'
