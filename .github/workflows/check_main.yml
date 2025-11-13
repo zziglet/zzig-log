@@ -1,0 +1,45 @@
+﻿name: 'Main Branch PR Check'
+
+on:
+  pull_request:
+    branches:
+      - main  # 'main' 브랜치로 향하는 PR일 때만 실행
+
+jobs:
+  build-and-test:
+    name: 'Build & Test'
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [23.0]
+
+    steps:
+      # 1. 코드 체크아웃
+      - name: 'Checkout code'
+        uses: actions/checkout@v4
+
+      # 2. pnpm 설치
+      - name: 'Install pnpm'
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      # 3. Node.js 환경 설정
+      - name: 'Use Node.js ${{ matrix.node-version }}'
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+      
+      # 4. 의존성 설치
+      - name: 'Install dependencies'
+        run: pnpm install
+
+      # 5. Lint 실행
+      - name: 'Run Lint'
+        run: pnpm run lint
+
+      # 6. Next.js 빌드 실행
+      - name: 'Run Next.js Build'
+        run: pnpm run build
