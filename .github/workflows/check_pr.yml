@@ -13,7 +13,7 @@ jobs:
       - name: Check branch name format
         run: |
           BRANCH_NAME="${{ github.head_ref }}"
-          REGEXP='^(?:setting|feat|fix|docs|style|refactor|chore|deploy)\/#\d+\/[a-z0-9-]+$'
+          REGEXP='^(setting|feat|fix|docs|style|refactor|chore|deploy)/#[0-9]+/[a-z0-9-]+$'
           
           echo "Checking branch name: $BRANCH_NAME"
           
@@ -23,6 +23,6 @@ jobs:
           else
             echo "Error: Branch name format is incorrect."
             echo "Must follow: <Type>/#<Issue-ID>/<description>"
-            echo "Example: Feat/#123/add-login-feature"
+            echo "Example: feat/#123/add-login-feature"
             exit 1
           fi
