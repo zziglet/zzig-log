@@ -1,8 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
+import { suit } from '@/styles/fonts';
+import '@/styles/globals.css';
+import EmotionThemeProvider from '@/components/EmotionThemeProvider';
 
 export const metadata: Metadata = {
-  title: "zzig.log",
-  description: "zziglet의 좌충우돌 개발 생존기",
+  title: 'zzig.log',
+  description: 'zziglet의 좌충우돌 개발 생존기',
 };
 
 export default function RootLayout({
@@ -11,11 +14,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ko" className={suit.variable}>
       <head>
-        <link rel="icon" href="./icon.svg" type="image/<generated>" sizes="<generated>" />
+        <link rel="icon" href="/icons/icon_logo.svg" type="image/svg+xml" />
       </head>
-      <body>{children}</body>
+      <body>
+        <EmotionThemeProvider>{children}</EmotionThemeProvider>
+      </body>
     </html>
   );
 }
