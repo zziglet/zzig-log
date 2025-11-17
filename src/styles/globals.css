@@ -1,0 +1,111 @@
+﻿html {
+  font-size: 62.5%;
+  -webkit-text-size-adjust: 100%;
+  line-height: 1.5;
+}
+
+body {
+  min-height: 100vh;
+  font-family: var(--font-suit);
+  font-size: 1.6rem; /* 16px */
+  text-rendering: optimizeSpeed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+:root {
+  /* Color styles */
+  --cream_50: #F6F1DD;
+  --cream_100: #EBE0B3;
+  --cream_200: #DAD0A6;
+  --cream_300: #C3BA94;
+  --cream_400: #A9A180;
+  --cream_500: #8E876B;
+  --cream_600: #726C55;
+  --cream_700: #565240;
+  --cream_800: #3A372A;
+  --cream_900: #201E16;
+  --cream_950: #12110B;
+
+  --peach_50: #F9EFE9;
+  --peach_100: #F3DED2;
+  --peach_200: #ECC4AA;
+  --peach_300: #E7AF85;
+  --peach_400: #D1986A;
+  --peach_500: #B18059;
+  --peach_600: #8F6746;
+  --peach_700: #6D4D34;
+  --peach_800: #4A3422;
+  --peach_900: #291B10;
+  --peach_950: #190F07;
+
+  --border--light: #DBDBDB;
+  --border--medium: #BABABA;
+  --border--heavy: #9D9D9D;
+
+  --text--disabled: #9D9D9D;
+  --text--body: #1B1B1B;
+  --text--title: #121212;
+
+  --background--base: #FAFAFA;
+  --background--layer_1: #D9D9D9;
+  --background--layer_2: #F6F1DD;
+
+  --danger_surface: #FCEDEC;
+  --danger_border: #F9D5D2;
+  --danger_base: #B13B28;
+  --danger_text: #922F1F;
+
+  --success_border: #AECA6A;
+  --success_base: #5E6E37;
+  --success_text: #475428;
+
+  /* todo : 사용 시에 update 필요 */
+  --warning_border: #D9D9D9;
+  --warning_base: #D9D9D9;
+  --warning_text: #D9D9D9;
+
+  --information_surface: #D9D9D9;
+  --information_border: #D9D9D9;
+  --information_base: #D9D9D9;
+  --information_text: #D9D9D9;
+
+  /* Text-size styles */
+  --heading--7xl: 12.8rem; /* 128px */
+  --heading--5xl: 7.2rem;  /* 72px */
+  --heading--4xl: 6.0rem;  /* 60px */
+  --heading--3xl: 4.8rem;  /* 48px */
+  --heading--2xl: 3.6rem;  /* 36px */
+  --heading--xl: 2.4rem;   /* 24px */
+  --body--2xl: 2.2rem;     /* 22px */
+  --body--xl: 2.0rem;      /* 20px */
+  --body--lg: 1.8rem;      /* 18px */
+  --body--md: 1.6rem;      /* 16px */
+  --body--sm: 1.5rem;      /* 15px */
+  --body--xs: 1.2rem;      /* 12px */
+
+  /* Effect styles */
+  --shadow:  0px 2px 20px rgba(68, 68, 68, 0.2);
+}
+
