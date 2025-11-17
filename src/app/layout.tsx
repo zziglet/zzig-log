@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { suit } from '@/styles/fonts';
 import '@/styles/globals.css';
-import EmotionThemeProvider from '@/components/EmotionThemeProvider';
+import EmotionThemeProvider from '@/components/providers/EmotionThemeProvider';
 
 export const metadata: Metadata = {
   title: 'zzig.log',
