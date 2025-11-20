@@ -9,6 +9,7 @@ body {
   font-family: var(--font-suit);
   font-size: 1.6rem; /* 16px */
   text-rendering: optimizeSpeed;
+  background-color: var(--background--base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
