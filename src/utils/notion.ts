@@ -3,6 +3,18 @@ import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import { PortfolioPost } from '@/types/portfolio';
 import { BlogPost } from '@/types/blog';
 
+if (!process.env.NOTION_API_KEY) {
+  throw new Error('NOTION_API_KEY environment variable is required');
+}
+
+if (!process.env.NOTION_DB_BLOG_ID) {
+  throw new Error('NOTION_DB_BLOG_ID environment variable is required');
+}
+
+if (!process.env.NOTION_NOTION_DB_PORTFOLIO_ID) {
+  throw new Error('NOTION_NOTION_DB_PORTFOLIO_ID environment variable is required');
+}
+
 export const notion = new Client({
   auth: process.env.NOTION_API_KEY,
   notionVersion: '2025-09-03',
