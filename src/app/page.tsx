@@ -1,4 +1,4 @@
-export default function Home() {
+function Info() {
   return (
     <div>
       <h1>Welcome to zziglet Blog!</h1>
@@ -6,3 +6,5 @@ export default function Home() {
     </div>
   );
 }
+
+export default Info;
