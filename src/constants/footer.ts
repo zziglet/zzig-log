@@ -40,3 +40,5 @@ export const FOOTER_LINKS: FooterLinkGroup[] = [
     ],
   },
 ];
+
+export const GITHUB_LINK = 'https://github.com/zziglet/zzig-log';
