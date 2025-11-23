@@ -11,7 +11,7 @@ if (!process.env.NOTION_DB_BLOG_ID) {
   throw new Error('NOTION_DB_BLOG_ID environment variable is required');
 }
 
-if (!process.env.NOTION_NOTION_DB_PORTFOLIO_ID) {
+if (!process.env.NOTION_DB_PORTFOLIO_ID) {
   throw new Error('NOTION_NOTION_DB_PORTFOLIO_ID environment variable is required');
 }
 
