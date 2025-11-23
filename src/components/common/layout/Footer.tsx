@@ -142,7 +142,7 @@ function Footer() {
         </FooterLeft>
         <FooterRight>
           <LogoWrapper>
-            <IconLink href={GITHUB_LINK} target="_blank" rel="noopener noreferrer" aria-label="Visit Github">
+            <IconLink href={GITHUB_LINK} target="_blank" rel="noopener noreferrer" aria-label="Visit GitHub">
               <LogoIcon />
             </IconLink>
             <DescriptionLabel>zzig.log</DescriptionLabel>
