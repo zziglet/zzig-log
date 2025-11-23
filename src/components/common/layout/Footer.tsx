@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import { FOOTER_LINKS } from '@/constants/footer';
+import { FOOTER_LINKS, GITHUB_LINK } from '@/constants/footer';
 import { theme } from '@/styles/theme';
 import styled from '@emotion/styled';
 import { RiGithubFill } from '@remixicon/react';
@@ -109,6 +109,19 @@ const DescriptionLabel = styled.div`
   position: relative;
 `;
 
+const IconLink = styled.a`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.7;
+  }
+`;
+
 function Footer() {
   const currentYear = new Date().getFullYear();
 
@@ -129,7 +142,9 @@ function Footer() {
         </FooterLeft>
         <FooterRight>
           <LogoWrapper>
-            <LogoIcon />
+            <IconLink href={GITHUB_LINK} target="_blank" rel="noopener noreferrer" aria-label="Visit GitHub">
+              <LogoIcon />
+            </IconLink>
             <DescriptionLabel>zzig.log</DescriptionLabel>
           </LogoWrapper>
           <DescriptionLabel>zzig.log | 대표 : 정지원</DescriptionLabel>

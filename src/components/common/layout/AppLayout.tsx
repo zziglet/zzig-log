@@ -13,8 +13,6 @@ const RootContainer = styled.div`
 
 const MainContent = styled.main`
   flex-grow: 1;
-  padding-top: 24px;
-  padding-bottom: 24px;
 `;
 
 const Container = styled.div`

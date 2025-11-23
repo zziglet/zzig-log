@@ -7,11 +7,15 @@
 body {
   min-height: 100vh;
   font-family: var(--font-suit);
-  font-size: 1.6rem; /* 16px */
+  font-size: var(--body--md);
   text-rendering: optimizeSpeed;
   background-color: var(--background--base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  word-break: keep-all;
+  overflow-wrap: normal;
+  margin: 0;
+  padding: 0;
 }
 
 img,
@@ -93,20 +97,38 @@ button {
   --information_text: #D9D9D9;
 
   /* Text-size styles */
-  --heading--7xl: 12.8rem; /* 128px */
-  --heading--5xl: 7.2rem;  /* 72px */
-  --heading--4xl: 6.0rem;  /* 60px */
-  --heading--3xl: 4.8rem;  /* 48px */
-  --heading--2xl: 3.6rem;  /* 36px */
-  --heading--xl: 2.4rem;   /* 24px */
-  --body--2xl: 2.2rem;     /* 22px */
-  --body--xl: 2.0rem;      /* 20px */
-  --body--lg: 1.8rem;      /* 18px */
-  --body--md: 1.6rem;      /* 16px */
-  --body--sm: 1.5rem;      /* 15px */
-  --body--xs: 1.2rem;      /* 12px */
+  --heading--7xl: 9.6rem;  /* 128px -> 96px */
+  --heading--5xl: 6.0rem;  /* 72px -> 60px */
+  --heading--4xl: 4.8rem;  /* 60px -> 48px */
+  --heading--3xl: 3.6rem;  /* 48px -> 36px */
+  --heading--2xl: 2.8rem;  /* 36px -> 28px */
+  --heading--xl:  2.4rem;  /* 24px -> 24px (유지) */
+  
+  --body--2xl: 2.0rem;     /* 22px -> 20px */
+  --body--xl:  1.8rem;     /* 20px -> 18px */
+  --body--lg:  1.6rem;     /* 18px -> 16px */
+  --body--md:  1.5rem;     /* 16px -> 15px (본문 기본값) */
+  --body--sm:  1.4rem;     /* 15px -> 14px */
+  --body--xs:  1.2rem;     /* 12px -> 12px (유지) */
 
   /* Effect styles */
   --shadow:  0px 2px 20px rgba(68, 68, 68, 0.2);
 }
 
+@media (max-width: 767px) {
+  :root {
+    --heading--7xl: 5.6rem; /* 96px -> 56px */
+    --heading--5xl: 4.0rem; /* 60px -> 40px */
+    --heading--4xl: 3.2rem; /* 48px -> 32px */
+    --heading--3xl: 2.8rem; /* 36px -> 28px */
+    --heading--2xl: 2.4rem; /* 28px -> 24px */
+    --heading--xl:  2.0rem; /* 24px -> 20px */
+
+    --body--2xl: 1.6rem;    /* 20px -> 18px */
+    --body--xl:  1.5rem;    /* 18px -> 16px */
+    --body--lg:  1.4rem;    /* 16px -> 15px */
+    --body--md:  1.3rem;    /* 15px -> 14px */
+    --body--sm:  1.2rem;    /* 14px -> 13px */
+    --body--xs:  1.2rem;
+  }
+}

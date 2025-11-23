@@ -1,24 +1,31 @@
 ﻿'use client';
 
+import { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { theme } from '@/styles/theme';
 import { NAV_LINKS } from '@/constants/nav';
+import { RiCloseFill, RiMenuLine } from '@remixicon/react';
+import MobileNav from './MobileNav';
 
 const StyledNav = styled.nav`
   width: 100%;
-  height: 100px;
-
+  height: 80px;
   position: sticky;
   top: 0;
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 40px;
+  padding: 0 24px;
   box-sizing: border-box;
   background-color: ${theme.colors.background.base};
+
+  @media (min-width: 768px) {
+    height: 100px;
+    padding: 0 40px;
+  }
 `;
 
 const NavContainer = styled.div`
@@ -27,45 +34,75 @@ const NavContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
-  text-align: center;
-`;
-
-const MenuGroup = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  height: 48px;
 `;
 
 const LogoLabel = styled(Link)`
   font-size: ${theme.textSizes.heading.xl};
   font-weight: 700;
-  color: ${theme.colors.cream[800]};
+  color: ${theme.colors.cream[700]};
   text-decoration: none;
   cursor: pointer;
+  z-index: 1001;
+`;
+
+const DesktopMenuGroup = styled.div`
+  display: none;
+
+  @media (min-width: 768px) {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
 `;
 
 const MenuLabel = styled(Link, {
   shouldForwardProp: (prop) => !prop.startsWith('$'),
-})<{ $weight: number; $color: string }>`
+})<{ $isActive: boolean }>`
   font-size: ${theme.textSizes.body.md};
-  font-weight: ${(props) => props.$weight};
-  color: ${(props) => props.$color};
+  font-weight: ${(props) => (props.$isActive ? 500 : 400)};
+  color: ${(props) => (props.$isActive ? theme.colors.cream[600] : theme.colors.text.disabled)};
   text-decoration: none;
   cursor: pointer;
+  transition: color 0.2s;
 
   &:hover {
     color: ${theme.colors.cream[500]};
   }
 `;
 
+const MobileMenuButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${theme.colors.text.body};
+  z-index: 1100;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+`;
+
+const CloseIcon = styled(RiCloseFill)`
+  width: 24px;
+  height: 24px;
+  color: ${theme.colors.cream[700]};
+`;
+
+const MenuIcon = styled(RiMenuLine)`
+  width: 24px;
+  height: 24px;
+  color: ${theme.colors.cream[700]};
+`;
+
 function NavBar() {
   const pathname = usePathname();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const activeColor = theme.colors.cream[600];
-  const inactiveColor = theme.colors.text.disabled;
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
+  const toggleMenu = () => setIsMobileMenuOpen((prev) => !prev);
 
   const checkIsActive = (linkHref: string): boolean => {
     if (linkHref === '/') {
@@ -76,28 +113,27 @@ function NavBar() {
   };
 
   return (
-    <StyledNav>
-      <NavContainer>
-        <LogoLabel href="/">zzig.log</LogoLabel>
-        <MenuGroup>
-          {NAV_LINKS.map((link) => {
-            const isActive = checkIsActive(link.href);
+    <>
+      <StyledNav>
+        <NavContainer>
+          <LogoLabel href="/">zzig.log</LogoLabel>
 
-            return (
-              <MenuLabel
-                key={link.title}
-                href={link.href}
-                $weight={isActive ? 500 : 400}
-                $color={isActive ? activeColor : inactiveColor}
-                aria-current={isActive ? 'page' : undefined}
-              >
+          <DesktopMenuGroup>
+            {NAV_LINKS.map((link) => (
+              <MenuLabel key={link.title} href={link.href} $isActive={checkIsActive(link.href)}>
                 {link.title}
               </MenuLabel>
-            );
-          })}
-        </MenuGroup>
-      </NavContainer>
-    </StyledNav>
+            ))}
+          </DesktopMenuGroup>
+
+          <MobileMenuButton onClick={toggleMenu} aria-label="메뉴 토글">
+            {isMobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
+          </MobileMenuButton>
+        </NavContainer>
+      </StyledNav>
+
+      <MobileNav isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
+    </>
   );
 }
 
