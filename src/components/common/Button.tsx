@@ -1,7 +1,6 @@
 ﻿import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import { theme } from '@/styles/theme';
-import { ButtonHTMLAttributes, AnchorHTMLAttributes, ElementType } from 'react';
 
 type ButtonSize = 'sm' | 'md' | 'lg';
 type ButtonColor = 'primary_fill' | 'secondary' | 'primary_line';
@@ -11,14 +10,6 @@ export interface CustomButtonSize {
   height?: number;
   font?: number;
 }
-
-interface StyleProps {
-  size: ButtonSize;
-  color: ButtonColor;
-  customSize?: CustomButtonSize;
-}
-
-type HTMLProps = ButtonHTMLAttributes<HTMLButtonElement> & AnchorHTMLAttributes<HTMLAnchorElement>;
 
 const sizeStyles = (size: ButtonSize, customSize: CustomButtonSize | undefined) => {
   if (customSize) {
@@ -32,7 +23,8 @@ const sizeStyles = (size: ButtonSize, customSize: CustomButtonSize | undefined) 
   switch (size) {
     case 'sm':
       return css`
-        font-size: ${theme.textSizes.body.xs};
+        font-size: ${theme.textSizes.body.lg};
+        font-weight: 400;
         width: 100px;
         height: 40px;
         border-radius: 12px;
@@ -40,6 +32,7 @@ const sizeStyles = (size: ButtonSize, customSize: CustomButtonSize | undefined) 
     case 'md':
       return css`
         font-size: ${theme.textSizes.body.xs};
+        font-weight: 500;
         width: 128px;
         height: 48px;
         border-radius: 16px;
@@ -47,6 +40,7 @@ const sizeStyles = (size: ButtonSize, customSize: CustomButtonSize | undefined) 
     case 'lg':
       return css`
         font-size: ${theme.textSizes.body.sm};
+        font-weight: 500;
         width: 164px;
         height: 52px;
         border-radius: 16px;
@@ -91,29 +85,27 @@ const colorStyles = (color: ButtonColor) => {
   }
 };
 
-const StyledButton = styled('button')<StyleProps>`
+const StyledButton = styled.button<ButtonProps>`
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 40px;
   cursor: pointer;
   padding: 0 14px;
-  font-weight: 700;
-  text-decoration: none;
+  font-family: var(--font-suit);
 
-  ${({ size, customSize }) => sizeStyles(size, customSize)}
-  ${({ color }) => colorStyles(color)}
+  ${({ size = 'md', customSize }) => sizeStyles(size, customSize)}
+  ${({ color = 'primary_fill' }) => colorStyles(color)}
 `;
 
-interface ButtonProps extends HTMLProps {
-  as?: ElementType;
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize;
   customSize?: CustomButtonSize;
   color?: ButtonColor;
 }
 
-function Button({ size = 'md', customSize, color = 'primary_fill', as, ...props }: ButtonProps) {
-  return <StyledButton as={as} size={size} customSize={customSize} color={color} {...props} />;
+function Button(props: ButtonProps) {
+  return <StyledButton {...props} />;
 }
 
 export default Button;

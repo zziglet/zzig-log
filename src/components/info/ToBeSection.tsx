@@ -3,6 +3,7 @@ import { SectionContainer, SectionTitle, HighlightText } from './shared.styles';
 import { LINKS } from '@/constants/info';
 import { theme } from '@/styles/theme';
 import Button from '@/components/common/Button';
+import Link from 'next/link';
 
 const VisionContainer = styled(SectionContainer)`
   text-align: center;
@@ -45,12 +46,12 @@ function ToBeSection() {
         </Description>
 
         <ButtonGroup>
-          <Button as="a" href={LINKS.blog} color="primary_fill">
-            blog
-          </Button>
-          <Button as="a" href={LINKS.portfolio} color="primary_line">
-            portfolio
-          </Button>
+          <Link href={LINKS.blog}>
+            <Button color="primary_fill">blog</Button>
+          </Link>
+          <Link href={LINKS.portfolio}>
+            <Button color="primary_line">portfolio</Button>
+          </Link>
         </ButtonGroup>
       </div>
     </VisionContainer>
