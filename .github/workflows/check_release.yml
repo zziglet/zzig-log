@@ -1,0 +1,71 @@
+﻿name: 'Release Branch Deployment (Production)'
+
+on:
+  push:
+    branches:
+      - release  # PR이 병합되어 'release' 브랜치에 코드가 들어오면 실행 (Production 배포)
+
+jobs:
+  deploy-production:
+    name: 'Deploy to Vercel (Production)'
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+    strategy:
+      matrix:
+        node-version: [20.0] # Vercel Node 버전에 맞춰 조정 (보통 LTS 권장)
+
+    steps:
+      # 1. 코드 체크아웃
+      - name: 'Checkout code'
+        uses: actions/checkout@v4
+
+      # 2. pnpm 설치
+      - name: 'Install pnpm'
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      # 3. Node.js 환경 설정
+      - name: 'Use Node.js ${{ matrix.node-version }}'
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+      
+      # 4. 의존성 설치 (Lint 등을 위해 필요)
+      - name: 'Install dependencies'
+        run: pnpm install
+
+      # 5. Lint 실행 (코드 품질 확인)
+      - name: 'Run Lint'
+        run: pnpm run lint
+
+      # ----------------------------------------------------------------
+      # Vercel 배포 단계 (Vercel CLI 활용)
+      # ----------------------------------------------------------------
+      
+      # 6. Vercel CLI 설치
+      - name: 'Install Vercel CLI'
+        run: pnpm install -g vercel@latest
+
+      # 7. Vercel 환경 정보 가져오기 (Production 환경)
+      - name: 'Pull Vercel Environment Information'
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      # 8. Vercel용 빌드 실행 (--prod 옵션이 중요)
+      # Vercel은 자체적인 빌드 시스템을 사용하므로 'pnpm run build' 대신 'vercel build'를 사용합니다.
+      # 이 명령어가 실행되면 .vercel/output 폴더에 배포 아티팩트가 생성됩니다.
+      - name: 'Build Project Artifacts'
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          # 빌드 시 필요한 환경변수가 있다면 여기에 매핑하거나 Vercel 대시보드에서 설정해야 합니다.
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          NOTION_DB_BLOG_ID: ${{ secrets.NOTION_DB_BLOG_ID }}
+          NOTION_DB_PORTFOLIO_ID: ${{ secrets.NOTION_DB_PORTFOLIO_ID }}
+
+      # 9. 실제 Production 배포 실행 (--prebuilt --prod)
+      - name: 'Deploy Project Artifacts to Vercel'
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
