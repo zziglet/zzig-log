@@ -134,7 +134,7 @@ export const gridGlobalStyles = css`
   /* --- Mobile (Default/Base, max-width: 767px) --- */
   .container {
     width: 100%;
-    max-width: 132px; /* provided value */
+    max-width: 480px;
     margin-right: auto;
     margin-left: auto;
     padding-right: 16px;
@@ -147,7 +147,7 @@ export const gridGlobalStyles = css`
   /* --- Tablet (768px <= screen <= 1023px) --- */
   ${theme.media.tablet} {
     .container {
-      max-width: 148px; /* provided value */
+      max-width: 768px;
       padding-right: 24px;
       padding-left: 24px;
     }
@@ -169,7 +169,7 @@ export const gridGlobalStyles = css`
   /* --- Desktop (screen >= 1024px) --- */
   ${theme.media.desktop} {
     .container {
-      max-width: 1280px;
+      max-width: 1200px;
       padding-right: 40px;
       padding-left: 40px;
     }
