@@ -50,17 +50,12 @@ const Label = styled.span`
 
   @media (max-width: 768px) {
     width: 160px;
-    font-size: 14px;
   }
 `;
 
 const Value = styled.span`
   flex: 1;
   color: ${theme.colors.text.body};
-
-  @media (max-width: 768px) {
-    font-size: 14px;
-  }
 `;
 
 function AboutMeSection() {

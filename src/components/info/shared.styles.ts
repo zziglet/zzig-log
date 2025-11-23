@@ -15,14 +15,14 @@ export const SectionContainer = styled.section<{ bgColor?: string }>`
 `;
 
 export const SectionTitle = styled.div`
-  font-size: ${theme.textSizes.heading['4xl']};
+  font-size: ${theme.textSizes.heading['5xl']};
   font-weight: 200;
   color: ${theme.colors.cream[600]};
   line-height: 1;
   padding: 52px 0;
 
   @media (max-width: 768px) {
-    font-size: ${theme.textSizes.heading['2xl']};
+    padding: 32px 0;
   }
 `;
 

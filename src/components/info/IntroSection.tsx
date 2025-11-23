@@ -6,18 +6,12 @@ import { theme } from '@/styles/theme';
 const DescriptionBox = styled.div`
   text-align: left;
   padding-bottom: 32px;
-  word-break: keep-all;
-  overflow-wrap: normal;
 `;
 
 const Greeting = styled.div`
   font-size: ${theme.textSizes.body.sm};
   color: ${theme.colors.text.body};
   font-weight: bold;
-
-  @media (max-width: 768px) {
-    font-size: 16px;
-  }
 `;
 
 const HighlightName = styled.span`
@@ -29,10 +23,6 @@ const SubTitle = styled.div`
   color: ${theme.colors.peach[600]};
   font-weight: 500;
   padding-top: 8px;
-
-  @media (max-width: 768px) {
-    font-size: 12px;
-  }
 `;
 
 const MainImage = styled.img`
