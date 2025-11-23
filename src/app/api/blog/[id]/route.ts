@@ -1,6 +1,5 @@
 ﻿import { NextRequest, NextResponse } from 'next/server';
 import { NotionToMarkdown } from 'notion-to-md';
-import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import { isFullPage, notion, parseBlogPost } from '@/utils/notion';
 
 const n2m = new NotionToMarkdown({ notionClient: notion });
@@ -14,12 +13,10 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
   try {
     const [pageResponse, mdBlocks] = await Promise.all([notion.pages.retrieve({ page_id: id }), n2m.pageToMarkdown(id)]);
-
-    if (!isFullPage(pageResponse as PageObjectResponse)) {
+    if (!isFullPage(pageResponse)) {
       throw new Error('Invalid Page Response');
     }
-
-    const metaData = parseBlogPost(pageResponse as PageObjectResponse);
+    const metaData = parseBlogPost(pageResponse);
 
     const mdString = n2m.toMarkdownString(mdBlocks);
 
