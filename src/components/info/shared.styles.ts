@@ -1,7 +1,7 @@
 ﻿import { theme } from '@/styles/theme';
 import styled from '@emotion/styled';
 
-export const SectionContainer = styled.section<{ bgColor?: string }>`
+export const SectionContainer = styled.section`
   width: 100%;
   display: flex;
   flex-direction: column;
