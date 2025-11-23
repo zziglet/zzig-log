@@ -63,13 +63,26 @@ function NavBar() {
   const activeColor = theme.colors.cream[600];
   const inactiveColor = theme.colors.text.disabled;
 
+  const checkIsActive = (linkHref: string): boolean => {
+    if (!isMounted) {
+      return false;
+    }
+
+    if (linkHref === '/') {
+      return pathname === linkHref;
+    } else {
+      return pathname.startsWith(linkHref);
+    }
+  };
+
   return (
     <StyledNav>
       <NavContainer>
-        <LogoLabel href="/info">zzig.log</LogoLabel>
+        <LogoLabel href="/">zzig.log</LogoLabel>
         <MenuGroup>
           {NAV_LINKS.map((link) => {
-            const isActive = isMounted ? pathname.startsWith(link.href) : false;
+            const isActive = checkIsActive(link.href);
+
             return (
               <MenuLabel
                 key={link.title}
