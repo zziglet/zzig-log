@@ -16,7 +16,7 @@ const VisionContainer = styled(SectionContainer)`
 `;
 
 const Description = styled.div`
-  font-size: ${theme.textSizes.body.sm};
+  font-size: ${theme.textSizes.body.xs};
   line-height: 1.6;
   color: ${theme.colors.text.body};
   padding-bottom: 48px;

@@ -129,5 +129,6 @@ button {
     --body--lg:  1.4rem;    /* 16px -> 15px */
     --body--md:  1.3rem;    /* 15px -> 14px */
     --body--sm:  1.2rem;    /* 14px -> 13px */
+    --body--xs:  1.2rem;
   }
 }
