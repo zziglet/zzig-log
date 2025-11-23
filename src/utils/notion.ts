@@ -24,7 +24,13 @@ export const BLOG_DB_ID = process.env.NOTION_DB_BLOG_ID || '';
 export const PORTFOLIO_DB_ID = process.env.NOTION_DB_PORTFOLIO_ID || '';
 
 export function isFullPage(response: unknown): response is PageObjectResponse {
-  return typeof response === 'object' && response !== null && 'properties' in response && 'object' in response && (response as any).object === 'page';
+  return (
+    typeof response === 'object' &&
+    response !== null &&
+    'object' in response &&
+    'properties' in response &&
+    (response as Record<string, unknown>).object === 'page'
+  );
 }
 
 export function parseBlogPost(post: PageObjectResponse): BlogPost {
