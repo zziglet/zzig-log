@@ -115,7 +115,7 @@ button {
   --shadow:  0px 2px 20px rgba(68, 68, 68, 0.2);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   :root {
     --heading--7xl: 5.6rem; /* 96px -> 56px */
     --heading--5xl: 4.0rem; /* 60px -> 40px */
