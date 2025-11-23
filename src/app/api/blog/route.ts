@@ -1,15 +1,15 @@
 ﻿import { NextResponse } from 'next/server';
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
-import { DATABASE_ID, isFullPage, notion, parseNotionPage } from '@/utils/notion';
+import { BLOG_DB_ID, isFullPage, notion, parseBlogPost } from '@/utils/notion';
 
 export async function GET() {
-  if (!DATABASE_ID) {
+  if (!BLOG_DB_ID) {
     return NextResponse.json({ error: 'Missing NOTION_DATABASE_ID' }, { status: 500 });
   }
 
   try {
     const dbResponse = await notion.databases.retrieve({
-      database_id: DATABASE_ID,
+      database_id: BLOG_DB_ID,
     });
 
     const dataSourceId = (dbResponse as any).data_sources?.[0]?.id;
@@ -28,7 +28,7 @@ export async function GET() {
       ],
     });
 
-    const posts = response.results.filter(isFullPage).map((post: PageObjectResponse) => parseNotionPage(post));
+    const posts = response.results.filter(isFullPage).map((post: PageObjectResponse) => parseBlogPost(post));
 
     return NextResponse.json(posts);
   } catch (error) {

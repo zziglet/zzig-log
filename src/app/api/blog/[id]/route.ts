@@ -1,7 +1,7 @@
 ﻿import { NextRequest, NextResponse } from 'next/server';
 import { NotionToMarkdown } from 'notion-to-md';
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
-import { isFullPage, notion, parseNotionPage } from '@/utils/notion';
+import { isFullPage, notion, parseBlogPost } from '@/utils/notion';
 
 const n2m = new NotionToMarkdown({ notionClient: notion });
 
@@ -19,7 +19,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       throw new Error('Invalid Page Response');
     }
 
-    const metaData = parseNotionPage(pageResponse as PageObjectResponse);
+    const metaData = parseBlogPost(pageResponse as PageObjectResponse);
 
     const mdString = n2m.toMarkdownString(mdBlocks);
 
