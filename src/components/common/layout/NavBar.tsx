@@ -1,10 +1,10 @@
 ﻿'use client';
 
 import styled from '@emotion/styled';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { theme } from '@/styles/theme';
 import { NAV_LINKS } from '@/constants/nav';
-import { useEffect, useState } from 'react';
 
 const StyledNav = styled.nav`
   width: 100%;
@@ -18,6 +18,7 @@ const StyledNav = styled.nav`
   justify-content: center;
   padding: 0 40px;
   box-sizing: border-box;
+  background-color: ${theme.colors.background.base};
 `;
 
 const NavContainer = styled.div`
@@ -27,8 +28,6 @@ const NavContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  text-decoration: none;
-  cursor: pointer;
   text-align: center;
 `;
 
@@ -40,39 +39,40 @@ const MenuGroup = styled.div`
   height: 48px;
 `;
 
-const LogoLabel = styled.a`
+const LogoLabel = styled(Link)`
   font-size: ${theme.textSizes.heading.xl};
   font-weight: 700;
   color: ${theme.colors.cream[800]};
+  text-decoration: none;
+  cursor: pointer;
 `;
 
-const MenuLabel = styled.a<{ size: string; weight: number; color: string }>`
+const MenuLabel = styled(Link, {
+  shouldForwardProp: (prop) => !prop.startsWith('$'),
+})<{ $weight: number; $color: string }>`
   font-size: ${theme.textSizes.body.md};
-  font-weight: ${(props: { weight: number }) => props.weight};
-  color: ${(props: { color: string }) => props.color};
+  font-weight: ${(props) => props.$weight};
+  color: ${(props) => props.$color};
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    color: ${theme.colors.cream[500]};
+  }
 `;
 
 function NavBar() {
   const pathname = usePathname();
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   const activeColor = theme.colors.cream[600];
   const inactiveColor = theme.colors.text.disabled;
 
   const checkIsActive = (linkHref: string): boolean => {
-    if (!isMounted) {
-      return false;
-    }
-
     if (linkHref === '/') {
       return pathname === linkHref;
-    } else {
-      return pathname.startsWith(linkHref);
     }
+
+    return pathname === linkHref || pathname.startsWith(`${linkHref}/`);
   };
 
   return (
@@ -87,9 +87,9 @@ function NavBar() {
               <MenuLabel
                 key={link.title}
                 href={link.href}
-                size={theme.textSizes.body.lg}
-                weight={isActive ? 500 : 400}
-                color={isActive ? activeColor : inactiveColor}
+                $weight={isActive ? 500 : 400}
+                $color={isActive ? activeColor : inactiveColor}
+                aria-current={isActive ? 'page' : undefined}
               >
                 {link.title}
               </MenuLabel>
