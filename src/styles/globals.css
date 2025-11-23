@@ -14,6 +14,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   word-break: keep-all;
   overflow-wrap: normal;
+  margin: 0;
+  padding: 0;
 }
 
 img,
@@ -115,7 +117,6 @@ button {
 
 @media (max-width: 768px) {
   :root {
-    /* 모바일에서는 타이틀 크기를 대폭 줄입니다 */
     --heading--7xl: 5.6rem; /* 96px -> 56px */
     --heading--5xl: 4.0rem; /* 60px -> 40px */
     --heading--4xl: 3.2rem; /* 48px -> 32px */
@@ -123,12 +124,10 @@ button {
     --heading--2xl: 2.4rem; /* 28px -> 24px */
     --heading--xl:  2.0rem; /* 24px -> 20px */
 
-    /* 본문 폰트는 가독성을 위해 너무 많이 줄이지 않습니다 */
     --body--2xl: 1.6rem;    /* 20px -> 18px */
     --body--xl:  1.5rem;    /* 18px -> 16px */
     --body--lg:  1.4rem;    /* 16px -> 15px */
     --body--md:  1.3rem;    /* 15px -> 14px */
     --body--sm:  1.2rem;    /* 14px -> 13px */
-    /* xs는 12px 미만으로 가면 읽기 힘들어서 1.2rem 유지 */
   }
 }
