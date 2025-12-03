@@ -1,4 +1,6 @@
-﻿import styled from '@emotion/styled';
+﻿'use client';
+
+import styled from '@emotion/styled';
 import { SectionContainer, SectionTitle, HighlightText } from '@/styles/shared.styles';
 import { LINKS } from '@/constants/info';
 import { theme } from '@/styles/theme';
