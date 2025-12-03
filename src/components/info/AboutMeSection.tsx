@@ -1,5 +1,5 @@
 ﻿import styled from '@emotion/styled';
-import { SectionContainer, SectionTitle } from './shared.styles';
+import { SectionContainer, SectionTitle } from '@/styles/shared.styles';
 import { INFO_IMAGES, PERSONAL_INFO, CAREER_HISTORY } from '@/constants/info';
 import { theme } from '@/styles/theme';
 
