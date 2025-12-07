@@ -30,3 +30,70 @@ export const HighlightText = styled.span`
   color: ${theme.colors.peach[600]};
   font-weight: bold;
 `;
+
+export const MarkdownBody = styled.div`
+  color: ${theme.colors.text.body};
+  font-size: 16px;
+  line-height: 1.8;
+
+  h1,
+  h2,
+  h3 {
+    margin-top: 40px;
+    margin-bottom: 16px;
+    font-weight: 700;
+    color: #121212;
+  }
+
+  h1 {
+    font-size: 28px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 12px;
+  }
+  h2 {
+    font-size: 24px;
+  }
+  h3 {
+    font-size: 20px;
+  }
+
+  p {
+    margin-bottom: 16px;
+  }
+
+  ul,
+  ol {
+    padding-left: 24px;
+    margin-bottom: 16px;
+  }
+
+  li {
+    margin-bottom: 8px;
+  }
+
+  img {
+    max-width: 100%;
+    border-radius: 12px;
+    margin: 24px 0;
+  }
+
+  code {
+    background-color: #f6f8fa;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'SF Mono', Consolas, Menlo, Monaco, monospace;
+    font-size: 0.9em;
+  }
+
+  pre code {
+    background-color: transparent;
+    padding: 0;
+  }
+
+  blockquote {
+    border-left: 4px solid ${theme.colors.peach[400]};
+    padding-left: 16px;
+    margin: 24px 0;
+    color: #666;
+  }
+`;
