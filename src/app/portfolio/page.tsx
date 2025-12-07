@@ -15,14 +15,19 @@ function PortfolioPage() {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const res = await fetch('/api/portfolio');
-      if (res.ok) {
-        const data = await res.json();
-        setPosts(data);
-      } else {
-        console.error('Failed to load posts');
+      try {
+        const res = await fetch('/api/portfolio');
+        if (res.ok) {
+          const data = await res.json();
+          setPosts(data);
+        } else {
+          console.error('Failed to load posts');
+        }
+      } catch (error) {
+        console.error('Failed to load posts', error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     fetchPosts();
@@ -32,11 +37,12 @@ function PortfolioPage() {
     setSelectedPost({ ...post, content: '' });
     setIsModalOpen(true);
 
+    const currentId = post.id;
     const res = await fetch(`/api/portfolio/${post.id}`);
 
     if (res.ok) {
       const detailData: PortfolioDetail = await res.json();
-      setSelectedPost(detailData);
+      setSelectedPost((prev) => (prev && prev.id === currentId ? detailData : prev));
     } else {
       setSelectedPost((prev) => (prev ? { ...prev, content: '## 내용을 불러올 수 없습니다.' } : null));
     }

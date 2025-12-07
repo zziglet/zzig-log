@@ -26,22 +26,27 @@ function PortfolioDetailPage() {
     const fetchDetail = async () => {
       if (!id) return;
 
-      const res = await fetch(`/api/portfolio/${id}`);
+      try {
+        const res = await fetch(`/api/portfolio/${id}`);
 
-      if (res.status === 404) {
+        if (res.status === 404) {
+          setIsError(true);
+          return;
+        }
+
+        if (res.ok) {
+          const data = await res.json();
+          setPost(data);
+        } else {
+          console.error('Server error');
+          setIsError(true);
+        }
+      } catch (error) {
+        console.error('Failed to load portfolio detail', error);
         setIsError(true);
+      } finally {
         setIsLoading(false);
-        return;
       }
-
-      if (res.ok) {
-        const data = await res.json();
-        setPost(data);
-      } else {
-        console.error('Server error');
-        setIsError(true);
-      }
-      setIsLoading(false);
     };
 
     fetchDetail();
