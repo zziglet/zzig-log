@@ -3,14 +3,10 @@
 import { useEffect } from 'react';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/navigation';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { PortfolioDetail } from '@/types/portfolio';
 import { theme } from '@/styles/theme';
-import TagList from '@/components/common/TagList';
-import CategoryBadge from '@/components/common/CategoryBadge';
-import { MarkdownBody } from '@/styles/shared.styles';
-import { RiShareLine, RiFullscreenLine, RiCloseLine, RiGithubFill, RiGlobalLine } from '@remixicon/react';
+import { PortfolioDetail } from '@/types/portfolio';
+import { RiFullscreenLine, RiCloseLine } from '@remixicon/react';
+import PortfolioDetailContent from './PortfolioDetailContent';
 
 const Backdrop = styled.div`
   position: fixed;
@@ -95,82 +91,6 @@ const ScrollArea = styled.div`
   }
 `;
 
-const TitleSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding-bottom: 24px;
-`;
-
-const DateBadge = styled.span`
-  font-size: ${theme.textSizes.body.sm};
-  color: ${theme.colors.text.disabled};
-  font-weight: 500;
-`;
-
-const MainTitle = styled.h2`
-  font-size: 32px;
-  font-weight: 800;
-  color: ${theme.colors.text.body};
-  margin: 0;
-  line-height: 1.3;
-`;
-
-const SubTitle = styled.p`
-  font-size: 20px;
-  color: ${theme.colors.text.body};
-  margin: 0;
-  font-weight: 400;
-  line-height: 1.5;
-`;
-
-const LinkButtonGroup = styled.div`
-  display: flex;
-  gap: 12px;
-  margin-top: 8px;
-`;
-
-const LinkButton = styled.a`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background-color: ${theme.colors.cream[50]};
-  color: ${theme.colors.text.body};
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
-  text-decoration: none;
-
-  &:hover {
-    background-color: ${theme.colors.peach[200]};
-    transform: translateY(-2px);
-  }
-`;
-
-const HeroImage = styled.img`
-  width: 100%;
-  max-height: 400px;
-  object-fit: cover;
-  border-radius: 16px;
-  background-color: ${theme.colors.background.layer1};
-  margin-bottom: 24px;
-`;
-
-const MetaSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 32px;
-`;
-
-const CategoryWrapper = styled.div`
-  display: flex;
-`;
-
 interface PortfolioModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -193,21 +113,8 @@ function PortfolioDetailModal({ isOpen, onClose, post }: PortfolioModalProps) {
 
   if (!isOpen || !post) return null;
 
-  const { id, title, description, thumbnail, startDate, endDate, tags, category, content, webUrl, githubUrl } = post;
-  const dateRange = `${startDate} - ${endDate || 'Ing'}`;
-
   const handleFullPage = () => {
-    router.push(`/portfolio/${id}`);
-  };
-
-  const handleCopyUrl = async () => {
-    try {
-      const url = `${window.location.origin}/portfolio/${id}`;
-      await navigator.clipboard.writeText(url);
-      alert('포트폴리오 링크가 복사되었습니다!');
-    } catch (err) {
-      console.error('URL 복사 실패', err);
-    }
+    router.push(`/portfolio/${post.id}`);
   };
 
   return (
@@ -223,42 +130,7 @@ function PortfolioDetailModal({ isOpen, onClose, post }: PortfolioModalProps) {
         </ModalHeader>
 
         <ScrollArea>
-          <TitleSection>
-            <DateBadge>{dateRange}</DateBadge>
-            <MainTitle>{title}</MainTitle>
-            <SubTitle>{description}</SubTitle>
-
-            <LinkButtonGroup>
-              {githubUrl && (
-                <LinkButton href={githubUrl} target="_blank" title="Github 저장소">
-                  <RiGithubFill size={24} />
-                </LinkButton>
-              )}
-
-              {webUrl && (
-                <LinkButton href={webUrl} target="_blank" title="웹사이트 방문">
-                  <RiGlobalLine size={24} />
-                </LinkButton>
-              )}
-
-              <LinkButton as="button" onClick={handleCopyUrl} title="링크 복사">
-                <RiShareLine size={24} />
-              </LinkButton>
-            </LinkButtonGroup>
-          </TitleSection>
-
-          {thumbnail && <HeroImage src={thumbnail} alt={title} />}
-
-          <MetaSection>
-            <CategoryWrapper>
-              <CategoryBadge>{category}</CategoryBadge>
-            </CategoryWrapper>
-            <TagList tags={tags} />
-          </MetaSection>
-
-          <MarkdownBody>
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
-          </MarkdownBody>
+          <PortfolioDetailContent post={post} />
         </ScrollArea>
       </ModalContainer>
     </Backdrop>
