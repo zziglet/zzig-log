@@ -71,7 +71,7 @@ const LinkButton = styled.a`
   text-decoration: none;
 
   &:hover {
-    background-color: ${theme.colors.peach[200]};
+    background-color: ${theme.colors.cream[100]};
     transform: translateY(-2px);
   }
 `;
@@ -119,13 +119,13 @@ function PortfolioDetailContent({ post }: PortfolioDetailContentProps) {
 
         <LinkButtonGroup>
           {githubUrl && (
-            <LinkButton href={githubUrl} target="_blank" title="Github 저장소">
+            <LinkButton href={githubUrl} target="_blank" rel="noopener noreferrer" title="Github 저장소">
               <RiGithubFill size={24} />
             </LinkButton>
           )}
 
           {webUrl && (
-            <LinkButton href={webUrl} target="_blank" title="웹사이트 방문">
+            <LinkButton href={webUrl} target="_blank" rel="noopener noreferrer" title="웹사이트 방문">
               <RiGlobalLine size={24} />
             </LinkButton>
           )}
