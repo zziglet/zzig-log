@@ -32,9 +32,10 @@ const EmptyState = styled.div`
 
 interface PortfolioListProps {
   posts: PortfolioPost[];
+  onClick: (post: PortfolioPost) => void;
 }
 
-function PortfolioList({ posts }: PortfolioListProps) {
+function PortfolioList({ posts, onClick }: PortfolioListProps) {
   if (!posts || posts.length === 0) {
     return <EmptyState>게시물이 존재하지 않습니다.</EmptyState>;
   }
@@ -42,8 +43,7 @@ function PortfolioList({ posts }: PortfolioListProps) {
   return (
     <GridContainer>
       {posts.map((post) => (
-        // todo: click event로 상세 모달 넣기
-        <PortfolioItem key={post.id} post={post} onClick={() => console.log(`Clicked post: ${post.id}`)} />
+        <PortfolioItem key={post.id} post={post} onClick={() => onClick(post)} />
       ))}
     </GridContainer>
   );
