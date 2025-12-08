@@ -2,17 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { notFound, useParams } from 'next/navigation';
-import styled from '@emotion/styled';
 import PortfolioDetailContent from '@/components/portfolio/PortfolioDetailContent';
 import { PortfolioDetail } from '@/types/portfolio';
 import Loading from '@/components/common/Loading';
-
-const PageContainer = styled.div`
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 60px 20px 100px;
-`;
+import { PageContainer } from '@/styles/shared.styles';
 
 function PortfolioDetailPage() {
   const params = useParams();

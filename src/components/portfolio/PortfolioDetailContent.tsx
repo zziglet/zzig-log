@@ -13,11 +13,13 @@ import { RiGithubFill, RiGlobalLine, RiShareLine } from '@remixicon/react';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
 `;
 
 const TitleSection = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 12px;
   padding-bottom: 24px;
 `;
@@ -78,6 +80,7 @@ const LinkButton = styled.a`
 
 const HeroImage = styled.img`
   width: 100%;
+  max-width: 800px;
   max-height: 500px;
   object-fit: cover;
   border-radius: 16px;
@@ -98,7 +101,7 @@ interface PortfolioDetailContentProps {
 
 function PortfolioDetailContent({ post }: PortfolioDetailContentProps) {
   const { id, title, description, thumbnail, startDate, endDate, tags, category, content, webUrl, githubUrl } = post;
-  const dateRange = `${startDate} - ${endDate || 'Ing'}`;
+  const dateRange = `${startDate} ~ ${endDate || 'Ing'}`;
 
   const handleCopyUrl = async () => {
     try {
