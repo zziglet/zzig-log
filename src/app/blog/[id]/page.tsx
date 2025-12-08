@@ -17,7 +17,11 @@ function BlogDetailPage() {
 
   useEffect(() => {
     const fetchDetail = async () => {
-      if (!id) return;
+      if (!id) {
+        setIsError(true);
+        setIsLoading(false);
+        return;
+      }
 
       try {
         const res = await fetch(`/api/blog/${id}`);
