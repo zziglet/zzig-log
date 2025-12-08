@@ -2,6 +2,7 @@
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import { PortfolioPost } from '@/types/portfolio';
 import { BlogPost } from '@/types/blog';
+import { formatDate } from './format';
 
 if (!process.env.NOTION_API_KEY) {
   throw new Error('NOTION_API_KEY environment variable is required');
@@ -36,6 +37,8 @@ export function isFullPage(response: unknown): response is PageObjectResponse {
 export function parseBlogPost(post: PageObjectResponse): BlogPost {
   const props = post.properties as any;
 
+  const rawDate = props.date?.date?.start ?? props.date?.created_time ?? post.created_time;
+
   return {
     id: post.id,
     title: props.content?.title?.[0]?.plain_text ?? '제목 없음',
@@ -43,7 +46,7 @@ export function parseBlogPost(post: PageObjectResponse): BlogPost {
     category: props.category?.select?.name ?? 'Uncategorized',
     tags: props.tags?.multi_select?.map((tag: any) => tag.name) ?? [],
     thumbnail: props.thumbnail?.files?.[0]?.file?.url ?? props.thumbnail?.files?.[0]?.external?.url ?? null,
-    date: props.date?.created_time ?? post.created_time,
+    date: formatDate(rawDate),
   };
 }
 
