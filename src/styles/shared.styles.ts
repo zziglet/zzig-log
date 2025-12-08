@@ -35,6 +35,7 @@ export const MarkdownBody = styled.div`
   color: ${theme.colors.text.body};
   font-size: 16px;
   line-height: 1.8;
+  padding: 12px 120px;
 
   h1,
   h2,
@@ -96,4 +97,10 @@ export const MarkdownBody = styled.div`
     margin: 24px 0;
     color: #666;
   }
+`;
+
+export const PageContainer = styled.div`
+  width: 100%;
+  margin: 0 auto;
+  padding: 60px 20px 100px;
 `;
