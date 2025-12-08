@@ -18,7 +18,7 @@ const EmptyState = styled.div`
   padding: 100px 0;
   text-align: center;
   color: ${theme.colors.text.disabled};
-  font-size: 16px;
+  font-size: ${theme.textSizes.body.md};
 `;
 
 interface BlogListProps {
