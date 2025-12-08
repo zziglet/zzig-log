@@ -51,10 +51,12 @@ const MobileMenuContent = styled.div<{ $isOpen: boolean }>`
   transition: transform 0.3s ease-in-out;
 `;
 
-const MobileMenuItem = styled(Link)<{ $isActive: boolean }>`
+const MobileMenuItem = styled(Link, {
+  shouldForwardProp: (prop) => prop !== 'isActive',
+})<{ isActive: boolean }>`
   font-size: ${theme.textSizes.heading.xl};
-  font-weight: ${(props) => (props.$isActive ? 700 : 400)};
-  color: ${(props) => (props.$isActive ? theme.colors.cream[600] : theme.colors.text.disabled)};
+  font-weight: ${(props) => (props.isActive ? 700 : 400)};
+  color: ${(props) => (props.isActive ? theme.colors.cream[600] : theme.colors.text.disabled)};
   text-decoration: none;
 `;
 
@@ -82,7 +84,7 @@ export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
     <MobileMenuOverlay $isOpen={isOpen} onClick={onClose}>
       <MobileMenuContent $isOpen={isOpen} onClick={(e) => e.stopPropagation()}>
         {NAV_LINKS.map((link) => (
-          <MobileMenuItem key={link.title} href={link.href} $isActive={checkIsActive(link.href)} onClick={onClose}>
+          <MobileMenuItem key={link.title} href={link.href} isActive={checkIsActive(link.href)} onClick={onClose}>
             {link.title}
           </MobileMenuItem>
         ))}
