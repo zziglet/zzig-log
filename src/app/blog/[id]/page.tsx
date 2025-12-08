@@ -2,25 +2,29 @@
 
 import { useEffect, useState } from 'react';
 import { notFound, useParams } from 'next/navigation';
-import PortfolioDetailContent from '@/components/portfolio/PortfolioDetailContent';
-import { PortfolioDetail } from '@/types/portfolio';
+import BlogDetailContent from '@/components/blog/BlogDetailContent';
 import Loading from '@/components/common/Loading';
+import { BlogPostDetail } from '@/types/blog';
 import { PageContainer } from '@/styles/shared.styles';
 
-function PortfolioDetailPage() {
+function BlogDetailPage() {
   const params = useParams();
   const id = params?.id as string;
 
-  const [post, setPost] = useState<PortfolioDetail | null>(null);
+  const [post, setPost] = useState<BlogPostDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     const fetchDetail = async () => {
-      if (!id) return;
+      if (!id) {
+        setIsError(true);
+        setIsLoading(false);
+        return;
+      }
 
       try {
-        const res = await fetch(`/api/portfolio/${id}`);
+        const res = await fetch(`/api/blog/${id}`);
 
         if (res.status === 404) {
           setIsError(true);
@@ -35,7 +39,7 @@ function PortfolioDetailPage() {
           setIsError(true);
         }
       } catch (error) {
-        console.error('Failed to load portfolio detail', error);
+        console.error('Failed to load blog detail', error);
         setIsError(true);
       } finally {
         setIsLoading(false);
@@ -59,9 +63,9 @@ function PortfolioDetailPage() {
 
   return (
     <PageContainer>
-      <PortfolioDetailContent post={post} />
+      <BlogDetailContent post={post} />
     </PageContainer>
   );
 }
 
-export default PortfolioDetailPage;
+export default BlogDetailPage;

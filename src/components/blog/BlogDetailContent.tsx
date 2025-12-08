@@ -1,26 +1,46 @@
 ﻿'use client';
 
 import styled from '@emotion/styled';
+import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { PortfolioDetail } from '@/types/portfolio';
+import { BlogPostDetail } from '@/types/blog';
 import { theme } from '@/styles/theme';
 import TagList from '@/components/common/TagList';
-import CategoryBadge from '@/components/common/CategoryBadge';
 import { MarkdownBody } from '@/styles/shared.styles';
-import { RiGithubFill, RiGlobalLine, RiShareLine } from '@remixicon/react';
+import { RiShareLine, RiArrowLeftLine } from '@remixicon/react';
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+`;
+
+const BackButtonLink = styled(Link)`
+  display: inline-flex;
+  align-self: flex-start;
+  gap: 4px;
+  text-decoration: none;
+  color: ${theme.colors.cream[600]};
+  font-size: ${theme.textSizes.body.md};
+  font-weight: 500;
+
+  &:hover {
+    color: ${theme.colors.cream[700]};
+  }
+`;
+
+const CategoryTitle = styled.div`
+  font-size: ${theme.textSizes.body.md};
+  color: ${theme.colors.cream[600]};
+  font-weight: 700;
 `;
 
 const TitleSection = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   padding-bottom: 24px;
 `;
 
@@ -30,13 +50,14 @@ const DateBadge = styled.span`
   font-weight: 500;
 `;
 
-const MainTitle = styled.h2`
+const MainTitle = styled.h1`
   font-size: 32px;
   font-weight: 800;
   color: ${theme.colors.text.body};
   margin: 0;
   line-height: 1.3;
   word-break: keep-all;
+  text-align: center;
 
   @media (min-width: 768px) {
     font-size: 36px;
@@ -50,15 +71,16 @@ const SubTitle = styled.p`
   font-weight: 400;
   line-height: 1.5;
   word-break: keep-all;
+  text-align: center;
 `;
 
-const LinkButtonGroup = styled.div`
+const ActionGroup = styled.div`
   display: flex;
   gap: 12px;
   padding-top: 8px;
 `;
 
-const LinkButton = styled.a`
+const IconButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -70,7 +92,6 @@ const LinkButton = styled.a`
   border: none;
   cursor: pointer;
   transition: all 0.2s;
-  text-decoration: none;
 
   &:hover {
     background-color: ${theme.colors.cream[100]};
@@ -85,29 +106,31 @@ const HeroImage = styled.img`
   object-fit: cover;
   border-radius: 16px;
   background-color: ${theme.colors.background.layer1};
+  margin: 24px 0;
 `;
 
-const MetaSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  padding: 32px 0;
+const Placeholder = styled.div`
+  width: 100%;
+  max-width: 800px;
+  max-height: 400px;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
+  background-color: ${theme.colors.background.layer2};
+  margin: 24px 0;
 `;
 
-interface PortfolioDetailContentProps {
-  post: PortfolioDetail;
+interface BlogDetailContentProps {
+  post: BlogPostDetail;
 }
 
-function PortfolioDetailContent({ post }: PortfolioDetailContentProps) {
-  const { id, title, description, thumbnail, startDate, endDate, tags, category, content, webUrl, githubUrl } = post;
-  const dateRange = `${startDate} ~ ${endDate || 'Ing'}`;
+function BlogDetailContent({ post }: BlogDetailContentProps) {
+  const { id, title, subtitle, thumbnail, date, tags, category, content } = post;
 
   const handleCopyUrl = async () => {
     try {
-      const url = `${window.location.origin}/portfolio/${id}`;
+      const url = `${window.location.origin}/blog/${id}`;
       await navigator.clipboard.writeText(url);
-      alert('포트폴리오 링크가 복사되었습니다!');
+      alert('게시글 링크가 복사되었습니다!');
     } catch (err) {
       console.error('URL 복사 실패', err);
     }
@@ -115,36 +138,23 @@ function PortfolioDetailContent({ post }: PortfolioDetailContentProps) {
 
   return (
     <Container>
+      <BackButtonLink href="/blog" aria-label="목록으로 돌아가기">
+        <RiArrowLeftLine size={28} />
+      </BackButtonLink>
+
       <TitleSection>
-        <DateBadge>{dateRange}</DateBadge>
-        <MainTitle>{title}</MainTitle>
-        <SubTitle>{description}</SubTitle>
-
-        <LinkButtonGroup>
-          {githubUrl && (
-            <LinkButton href={githubUrl} target="_blank" rel="noopener noreferrer" title="Github 저장소">
-              <RiGithubFill size={24} />
-            </LinkButton>
-          )}
-
-          {webUrl && (
-            <LinkButton href={webUrl} target="_blank" rel="noopener noreferrer" title="웹사이트 방문">
-              <RiGlobalLine size={24} />
-            </LinkButton>
-          )}
-
-          <LinkButton as="button" onClick={handleCopyUrl} title="링크 복사">
-            <RiShareLine size={24} />
-          </LinkButton>
-        </LinkButtonGroup>
-      </TitleSection>
-
-      {thumbnail && <HeroImage src={thumbnail} alt={title} />}
-
-      <MetaSection>
-        <CategoryBadge>{category}</CategoryBadge>
+        <CategoryTitle>{category}</CategoryTitle>
         <TagList tags={tags} />
-      </MetaSection>
+        <MainTitle>{title}</MainTitle>
+        {subtitle && <SubTitle>{subtitle}</SubTitle>}
+        {thumbnail ? <HeroImage src={thumbnail} alt={title} /> : <Placeholder />}
+        <DateBadge>{date}</DateBadge>
+        <ActionGroup>
+          <IconButton onClick={handleCopyUrl} title="링크 복사">
+            <RiShareLine size={24} />
+          </IconButton>
+        </ActionGroup>
+      </TitleSection>
 
       <MarkdownBody>
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
@@ -153,4 +163,4 @@ function PortfolioDetailContent({ post }: PortfolioDetailContentProps) {
   );
 }
 
-export default PortfolioDetailContent;
+export default BlogDetailContent;
