@@ -35,7 +35,15 @@ export const MarkdownBody = styled.div`
   color: ${theme.colors.text.body};
   font-size: 16px;
   line-height: 1.8;
-  padding: 12px 120px;
+  padding: 12px 20px;
+
+  @media (min-width: 768px) {
+    padding: 12px 60px;
+  }
+
+  @media (min-width: 1024px) {
+    padding: 12px 120px;
+  }
 
   h1,
   h2,

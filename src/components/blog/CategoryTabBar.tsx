@@ -11,7 +11,7 @@ const TabContainer = styled.div`
   align-items: center;
   gap: 16px;
   padding: 8px 0 16px;
-  border-bottom: 0.5px solid ${theme.colors.border || '#dbdbdb'};
+  border-bottom: 0.5px solid ${theme.colors.border};
   background-color: ${theme.colors.background.base};
   box-sizing: border-box;
 `;
