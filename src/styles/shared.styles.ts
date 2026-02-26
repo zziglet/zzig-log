@@ -1,4 +1,6 @@
-﻿import { theme } from '@/styles/theme';
+﻿'use client';
+
+import { theme } from '@/styles/theme';
 import styled from '@emotion/styled';
 
 export const SectionContainer = styled.section`
