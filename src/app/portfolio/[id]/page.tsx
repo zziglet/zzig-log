@@ -1,14 +1,14 @@
-import { notFound } from 'next/navigation';
+﻿import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import PortfolioDetailContent from '@/components/portfolio/PortfolioDetailContent';
 import { PageContainer } from '@/styles/shared.styles';
 import { getPortfolioPost } from '@/services/portfolio.service';
 
-interface Props {
+interface PortfolioDetailPageProps {
   params: Promise<{ id: string }>;
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: PortfolioDetailPageProps): Promise<Metadata> {
   const { id } = await params;
   const post = await getPortfolioPost(id).catch(() => null);
 
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function PortfolioDetailPage({ params }: Props) {
+export default async function PortfolioDetailPage({ params }: PortfolioDetailPageProps) {
   const { id } = await params;
   const post = await getPortfolioPost(id);
 
