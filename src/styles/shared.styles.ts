@@ -109,4 +109,9 @@ export const PageContainer = styled.div`
   width: 100%;
   margin: 0 auto;
   padding: 60px 20px 100px;
+  box-sizing: border-box;
+
+  @media (min-width: 768px) {
+    padding-top: 80px;
+  }
 `;
