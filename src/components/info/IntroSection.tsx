@@ -28,16 +28,6 @@ const SubTitle = styled.div`
   padding-top: 8px;
 `;
 
-const MainImageWrapper = styled.div`
-  position: relative;
-  width: 100%;
-  height: 600px;
-
-  @media (max-width: 768px) {
-    height: 300px;
-  }
-`;
-
 function IntroSection() {
   return (
     <SectionContainer>
@@ -48,9 +38,7 @@ function IntroSection() {
         </Greeting>
         <SubTitle>Web Front-End Developer in Seoul, Korea</SubTitle>
       </DescriptionBox>
-      <MainImageWrapper>
-        <Image src={INFO_IMAGES.homeIcon1} alt="Intro Main" fill sizes="100vw" style={{ objectFit: 'cover' }} priority />
-      </MainImageWrapper>
+      <Image src={INFO_IMAGES.homeIcon1} alt="Intro Main" width={4776} height={1744} unoptimized style={{ width: '100%', height: 'auto' }} priority />
     </SectionContainer>
   );
 }
