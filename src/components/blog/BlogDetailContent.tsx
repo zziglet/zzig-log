@@ -1,5 +1,6 @@
 ﻿'use client';
 
+import Image from 'next/image';
 import styled from '@emotion/styled';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
@@ -99,12 +100,13 @@ const IconButton = styled.button`
   }
 `;
 
-const HeroImage = styled.img`
+const HeroImageWrapper = styled.div`
+  position: relative;
   width: 100%;
   max-width: 800px;
-  max-height: 500px;
-  object-fit: cover;
+  height: 500px;
   border-radius: 16px;
+  overflow: hidden;
   background-color: ${theme.colors.background.layer1};
   margin: 24px 0;
 `;
@@ -147,7 +149,13 @@ function BlogDetailContent({ post }: BlogDetailContentProps) {
         <TagList tags={tags} />
         <MainTitle>{title}</MainTitle>
         {subtitle && <SubTitle>{subtitle}</SubTitle>}
-        {thumbnail ? <HeroImage src={thumbnail} alt={title} /> : <Placeholder />}
+        {thumbnail ? (
+          <HeroImageWrapper>
+            <Image src={thumbnail} alt={title} fill sizes="(max-width: 800px) 100vw, 800px" style={{ objectFit: 'cover' }} priority />
+          </HeroImageWrapper>
+        ) : (
+          <Placeholder />
+        )}
         <DateBadge>{date}</DateBadge>
         <ActionGroup>
           <IconButton onClick={handleCopyUrl} title="링크 복사">
