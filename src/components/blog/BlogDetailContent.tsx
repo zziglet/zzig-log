@@ -151,7 +151,7 @@ function BlogDetailContent({ post }: BlogDetailContentProps) {
         {subtitle && <SubTitle>{subtitle}</SubTitle>}
         {thumbnail ? (
           <HeroImageWrapper>
-            <Image src={thumbnail} alt={title} fill sizes="(max-width: 800px) 100vw, 800px" style={{ objectFit: 'cover' }} priority />
+            <Image src={thumbnail} alt={title} fill sizes="(max-width: 800px) 100vw, 800px" quality={90} style={{ objectFit: 'cover' }} priority />
           </HeroImageWrapper>
         ) : (
           <Placeholder />

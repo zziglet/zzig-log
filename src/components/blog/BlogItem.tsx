@@ -101,7 +101,7 @@ function BlogItem({ post, onClick }: BlogItemProps) {
     <ItemContainer onClick={onClick}>
       {thumbnail ? (
         <ThumbnailWrapper>
-          <Image src={thumbnail} alt={`${title} thumbnail`} fill sizes="184px" style={{ objectFit: 'cover' }} />
+          <Image src={thumbnail} alt={`${title} thumbnail`} fill sizes="184px" quality={90} style={{ objectFit: 'cover' }} />
         </ThumbnailWrapper>
       ) : (
         <Placeholder />

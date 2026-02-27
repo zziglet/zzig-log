@@ -91,7 +91,7 @@ function PortfolioItem({ post, onClick }: PortfolioItemProps) {
     <CardContainer onClick={onClick}>
       {thumbnail ? (
         <ThumbnailWrapper>
-          <Image src={thumbnail} alt={`${title} thumbnail`} fill sizes="(max-width: 768px) 100vw, 320px" style={{ objectFit: 'cover' }} />
+          <Image src={thumbnail} alt={`${title} thumbnail`} fill sizes="(max-width: 768px) 100vw, 320px" quality={90} style={{ objectFit: 'cover' }} />
         </ThumbnailWrapper>
       ) : (
         <Placeholder />
