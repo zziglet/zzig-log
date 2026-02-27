@@ -11,6 +11,7 @@ import CategoryBadge from '@/components/common/CategoryBadge';
 import { MarkdownBody } from '@/styles/shared.styles';
 import { RiGithubFill, RiGlobalLine, RiShareLine } from '@remixicon/react';
 import { IMAGE_QUALITY } from '@/constants';
+import { useToast } from '@/components/common/Toast';
 
 const Container = styled.div`
   display: flex;
@@ -105,12 +106,13 @@ interface PortfolioDetailContentProps {
 function PortfolioDetailContent({ post }: PortfolioDetailContentProps) {
   const { id, title, description, thumbnail, startDate, endDate, tags, category, content, webUrl, githubUrl } = post;
   const dateRange = `${startDate} ~ ${endDate || 'Ing'}`;
+  const { showToast, ToastUI } = useToast();
 
   const handleCopyUrl = async () => {
     try {
       const url = `${window.location.origin}/portfolio/${id}`;
       await navigator.clipboard.writeText(url);
-      alert('포트폴리오 링크가 복사되었습니다!');
+      showToast('포트폴리오 링크가 복사되었습니다!');
     } catch (err) {
       console.error('URL 복사 실패', err);
     }
@@ -156,6 +158,8 @@ function PortfolioDetailContent({ post }: PortfolioDetailContentProps) {
       <MarkdownBody>
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
       </MarkdownBody>
+
+      {ToastUI}
     </Container>
   );
 }
