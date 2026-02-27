@@ -34,51 +34,74 @@ export function isFullPage(response: unknown): response is PageObjectResponse {
   );
 }
 
-export function parseBlogPost(post: PageObjectResponse): BlogPost {
-  const props = post.properties as any;
+type NotionProperties = PageObjectResponse['properties'];
 
-  const rawDate = props.date?.date?.start ?? props.date?.created_time ?? post.created_time;
+function getTitle(props: NotionProperties, key: string, fallback: string): string {
+  const prop = props[key];
+  return prop?.type === 'title' ? (prop.title[0]?.plain_text ?? fallback) : fallback;
+}
+
+function getRichText(props: NotionProperties, key: string): string {
+  const prop = props[key];
+  return prop?.type === 'rich_text' ? (prop.rich_text[0]?.plain_text ?? '') : '';
+}
+
+function getSelect(props: NotionProperties, key: string, fallback: string): string {
+  const prop = props[key];
+  return prop?.type === 'select' ? (prop.select?.name ?? fallback) : fallback;
+}
+
+function getMultiSelect(props: NotionProperties, key: string): string[] {
+  const prop = props[key];
+  return prop?.type === 'multi_select' ? prop.multi_select.map((item) => item.name) : [];
+}
+
+function getDate(props: NotionProperties, key: string): { start: string; end: string | null } | null {
+  const prop = props[key];
+  return prop?.type === 'date' && prop.date ? { start: prop.date.start, end: prop.date.end } : null;
+}
+
+function getUrl(props: NotionProperties, key: string): string | null {
+  const prop = props[key];
+  return prop?.type === 'url' ? prop.url : null;
+}
+
+function getFileThumbnail(props: NotionProperties, key: string): string | null {
+  const prop = props[key];
+  if (prop?.type !== 'files' || !prop.files[0]) return null;
+  const file = prop.files[0];
+  return file.type === 'file' ? file.file.url : file.type === 'external' ? file.external.url : null;
+}
+
+export function parseBlogPost(post: PageObjectResponse): BlogPost {
+  const props = post.properties;
+  const date = getDate(props, 'date');
 
   return {
     id: post.id,
-    title: props.content?.title?.[0]?.plain_text ?? '제목 없음',
-    subtitle: props.subtitle?.rich_text?.[0]?.plain_text ?? '',
-    category: props.category?.select?.name ?? 'Uncategorized',
-    tags: props.tags?.multi_select?.map((tag: any) => tag.name) ?? [],
-    thumbnail: props.thumbnail?.files?.[0]?.file?.url ?? props.thumbnail?.files?.[0]?.external?.url ?? null,
-    date: formatDate(rawDate),
+    title: getTitle(props, 'content', '제목 없음'),
+    subtitle: getRichText(props, 'subtitle'),
+    category: getSelect(props, 'category', 'Uncategorized'),
+    tags: getMultiSelect(props, 'tags'),
+    thumbnail: getFileThumbnail(props, 'thumbnail'),
+    date: formatDate(date?.start ?? post.created_time),
   };
 }
 
 export function parsePortfolioPage(post: PageObjectResponse): PortfolioPost {
-  const props = post.properties as any;
-
-  const title = props.content?.title?.[0]?.plain_text ?? '프로젝트명 없음';
-  const description = props.description?.rich_text?.[0]?.plain_text ?? '';
-
-  const thumbnailFile = props.thumbnail?.files?.[0];
-  const thumbnail = thumbnailFile?.file?.url ?? thumbnailFile?.external?.url ?? null;
-
-  const category = props.category?.select?.name ?? 'Etc';
-  const tags = props.tags?.multi_select?.map((tag: any) => tag.name) ?? [];
-
-  const githubUrl = props.github?.url ?? null;
-  const webUrl = props.web?.url ?? null;
-
-  const dateProperty = props.date?.date;
-  const startDate = dateProperty?.start ?? post.created_time;
-  const endDate = dateProperty?.end ?? null;
+  const props = post.properties;
+  const date = getDate(props, 'date');
 
   return {
     id: post.id,
-    title,
-    description,
-    thumbnail,
-    category,
-    tags,
-    githubUrl,
-    webUrl,
-    startDate,
-    endDate,
+    title: getTitle(props, 'content', '프로젝트명 없음'),
+    description: getRichText(props, 'description'),
+    thumbnail: getFileThumbnail(props, 'thumbnail'),
+    category: getSelect(props, 'category', 'Etc'),
+    tags: getMultiSelect(props, 'tags'),
+    githubUrl: getUrl(props, 'github'),
+    webUrl: getUrl(props, 'web'),
+    startDate: date?.start ?? post.created_time,
+    endDate: date?.end ?? null,
   };
 }
