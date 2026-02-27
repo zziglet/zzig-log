@@ -12,6 +12,7 @@ import { MarkdownBody } from '@/styles/shared.styles';
 import { RiGithubFill, RiGlobalLine, RiShareLine } from '@remixicon/react';
 import { IMAGE_QUALITY } from '@/constants';
 import { useToast } from '@/components/common/Toast';
+import { copyToClipboard } from '@/utils/clipboard';
 
 const Container = styled.div`
   display: flex;
@@ -109,13 +110,9 @@ function PortfolioDetailContent({ post }: PortfolioDetailContentProps) {
   const { showToast, ToastUI } = useToast();
 
   const handleCopyUrl = async () => {
-    try {
-      const url = `${window.location.origin}/portfolio/${id}`;
-      await navigator.clipboard.writeText(url);
-      showToast('포트폴리오 링크가 복사되었습니다!');
-    } catch (err) {
-      console.error('URL 복사 실패', err);
-    }
+    const url = `${window.location.origin}/portfolio/${id}`;
+    const success = await copyToClipboard(url);
+    if (success) showToast('포트폴리오 링크가 복사되었습니다!');
   };
 
   return (
