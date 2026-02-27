@@ -83,7 +83,7 @@ const HeroImageWrapper = styled.div`
   position: relative;
   width: 100%;
   max-width: 800px;
-  height: 500px;
+  aspect-ratio: 16 / 9;
   border-radius: 16px;
   overflow: hidden;
   background-color: ${theme.colors.background.layer1};
