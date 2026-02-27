@@ -1,5 +1,6 @@
 ﻿'use client';
 
+import Image from 'next/image';
 import styled from '@emotion/styled';
 import { SectionContainer, SectionTitle } from '@/styles/shared.styles';
 import { INFO_IMAGES, PERSONAL_INFO, CAREER_HISTORY } from '@/constants/info';
@@ -17,9 +18,10 @@ const ContentWrapper = styled.div`
   }
 `;
 
-const ProfileImage = styled.img`
+const ProfileImageWrapper = styled.div`
+  position: relative;
   width: 400px;
-  object-fit: cover;
+  aspect-ratio: 3 / 4;
 
   @media (max-width: 768px) {
     width: 200px;
@@ -64,7 +66,9 @@ function AboutMeSection() {
   return (
     <SectionContainer>
       <ContentWrapper>
-        <ProfileImage src={INFO_IMAGES.homeIcon2} alt="Profile" />
+        <ProfileImageWrapper>
+          <Image src={INFO_IMAGES.homeIcon2} alt="Profile" fill sizes="(max-width: 768px) 200px, 400px" style={{ objectFit: 'cover' }} />
+        </ProfileImageWrapper>
 
         <InfoColumn>
           <SectionTitle>
