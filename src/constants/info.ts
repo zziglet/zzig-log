@@ -1,7 +1,7 @@
 ﻿export const INFO_IMAGES = {
-  homeIcon1: '/images/home_1.png',
-  homeIcon2: '/images/home_2.png',
-  homeIcon3: '/images/home_3.png',
+  homeIcon1: '/images/home_1.webp',
+  homeIcon2: '/images/home_2.webp',
+  homeIcon3: '/images/home_3.webp',
 };
 
 export const PERSONAL_INFO = {
