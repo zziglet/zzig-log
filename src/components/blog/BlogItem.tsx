@@ -1,5 +1,6 @@
 ﻿'use client';
 
+import Image from 'next/image';
 import styled from '@emotion/styled';
 import { theme } from '@/styles/theme';
 import TagList from '@/components/common/TagList';
@@ -23,11 +24,12 @@ const ItemContainer = styled.article`
   }
 `;
 
-const Thumbnail = styled.img`
+const ThumbnailWrapper = styled.div`
+  position: relative;
   width: 184px;
   height: 184px;
-  object-fit: cover;
   border-radius: 12px;
+  overflow: hidden;
   background-color: ${theme.colors.background.layer1};
   flex-shrink: 0;
 `;
@@ -97,7 +99,13 @@ function BlogItem({ post, onClick }: BlogItemProps) {
 
   return (
     <ItemContainer onClick={onClick}>
-      {thumbnail ? <Thumbnail src={thumbnail} alt={`${title} thumbnail`} /> : <Placeholder />}
+      {thumbnail ? (
+        <ThumbnailWrapper>
+          <Image src={thumbnail} alt={`${title} thumbnail`} fill sizes="184px" style={{ objectFit: 'cover' }} />
+        </ThumbnailWrapper>
+      ) : (
+        <Placeholder />
+      )}
 
       <ContentWrapper>
         <MetaHeader>

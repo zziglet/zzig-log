@@ -1,5 +1,6 @@
 ﻿'use client';
 
+import Image from 'next/image';
 import styled from '@emotion/styled';
 import { PortfolioPost } from '@/types/portfolio';
 import { theme } from '@/styles/theme';
@@ -26,11 +27,12 @@ const CardContainer = styled.article`
   }
 `;
 
-const Thumbnail = styled.img`
+const ThumbnailWrapper = styled.div`
+  position: relative;
   width: 100%;
   aspect-ratio: 320 / 200;
-  object-fit: cover;
   border-radius: 12px;
+  overflow: hidden;
   background-color: ${theme.colors.background.layer1};
 `;
 
@@ -87,7 +89,13 @@ function PortfolioItem({ post, onClick }: PortfolioItemProps) {
 
   return (
     <CardContainer onClick={onClick}>
-      {thumbnail ? <Thumbnail src={thumbnail} alt={`${title} thumbnail`} /> : <Placeholder />}
+      {thumbnail ? (
+        <ThumbnailWrapper>
+          <Image src={thumbnail} alt={`${title} thumbnail`} fill sizes="(max-width: 768px) 100vw, 320px" style={{ objectFit: 'cover' }} />
+        </ThumbnailWrapper>
+      ) : (
+        <Placeholder />
+      )}
 
       <ContentWrapper>
         <Header>

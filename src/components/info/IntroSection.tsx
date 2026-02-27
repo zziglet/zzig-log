@@ -1,5 +1,6 @@
 ﻿'use client';
 
+import Image from 'next/image';
 import styled from '@emotion/styled';
 import { SectionContainer, SectionTitle } from '@/styles/shared.styles';
 import { INFO_IMAGES } from '@/constants/info';
@@ -27,10 +28,14 @@ const SubTitle = styled.div`
   padding-top: 8px;
 `;
 
-const MainImage = styled.img`
+const MainImageWrapper = styled.div`
+  position: relative;
   width: 100%;
-  max-height: 600px;
-  object-fit: cover;
+  height: 600px;
+
+  @media (max-width: 768px) {
+    height: 300px;
+  }
 `;
 
 function IntroSection() {
@@ -43,7 +48,9 @@ function IntroSection() {
         </Greeting>
         <SubTitle>Web Front-End Developer in Seoul, Korea</SubTitle>
       </DescriptionBox>
-      <MainImage src={INFO_IMAGES.homeIcon1} alt="Intro Main" />
+      <MainImageWrapper>
+        <Image src={INFO_IMAGES.homeIcon1} alt="Intro Main" fill sizes="100vw" style={{ objectFit: 'cover' }} priority />
+      </MainImageWrapper>
     </SectionContainer>
   );
 }
