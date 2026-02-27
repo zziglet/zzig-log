@@ -38,12 +38,15 @@ type NotionProperties = PageObjectResponse['properties'];
 
 function getTitle(props: NotionProperties, key: string, fallback: string): string {
   const prop = props[key];
-  return prop?.type === 'title' ? (prop.title[0]?.plain_text ?? fallback) : fallback;
+  if (prop?.type !== 'title') return fallback;
+  const text = prop.title.map((t) => t.plain_text).join('');
+  return text || fallback;
 }
 
 function getRichText(props: NotionProperties, key: string): string {
   const prop = props[key];
-  return prop?.type === 'rich_text' ? (prop.rich_text[0]?.plain_text ?? '') : '';
+  if (prop?.type !== 'rich_text') return '';
+  return prop.rich_text.map((t) => t.plain_text).join('');
 }
 
 function getSelect(props: NotionProperties, key: string, fallback: string): string {
