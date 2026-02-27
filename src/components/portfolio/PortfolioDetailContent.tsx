@@ -10,6 +10,7 @@ import TagList from '@/components/common/TagList';
 import CategoryBadge from '@/components/common/CategoryBadge';
 import { MarkdownBody } from '@/styles/shared.styles';
 import { RiGithubFill, RiGlobalLine, RiShareLine } from '@remixicon/react';
+import { IMAGE_QUALITY } from '@/constants';
 
 const Container = styled.div`
   display: flex;
@@ -143,7 +144,7 @@ function PortfolioDetailContent({ post }: PortfolioDetailContentProps) {
 
       {thumbnail && (
         <HeroImageWrapper>
-          <Image src={thumbnail} alt={title} fill sizes="(max-width: 800px) 100vw, 800px" quality={90} style={{ objectFit: 'cover' }} priority />
+          <Image src={thumbnail} alt={title} fill sizes="(max-width: 800px) 100vw, 800px" quality={IMAGE_QUALITY} style={{ objectFit: 'cover' }} priority />
         </HeroImageWrapper>
       )}
 

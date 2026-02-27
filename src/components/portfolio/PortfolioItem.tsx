@@ -6,6 +6,7 @@ import { PortfolioPost } from '@/types/portfolio';
 import { theme } from '@/styles/theme';
 import TagList from '@/components/common/TagList';
 import CategoryBadge from '@/components/common/CategoryBadge';
+import { IMAGE_QUALITY } from '@/constants';
 
 const CardContainer = styled.article`
   width: 100%;
@@ -91,7 +92,14 @@ function PortfolioItem({ post, onClick }: PortfolioItemProps) {
     <CardContainer onClick={onClick}>
       {thumbnail ? (
         <ThumbnailWrapper>
-          <Image src={thumbnail} alt={`${title} thumbnail`} fill sizes="(max-width: 768px) 100vw, 320px" quality={90} style={{ objectFit: 'cover' }} />
+          <Image
+            src={thumbnail}
+            alt={`${title} thumbnail`}
+            fill
+            sizes="(max-width: 768px) 100vw, 320px"
+            quality={IMAGE_QUALITY}
+            style={{ objectFit: 'cover' }}
+          />
         </ThumbnailWrapper>
       ) : (
         <Placeholder />
