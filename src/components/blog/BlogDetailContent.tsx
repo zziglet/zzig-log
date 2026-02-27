@@ -12,6 +12,7 @@ import { MarkdownBody } from '@/styles/shared.styles';
 import { RiShareLine, RiArrowLeftLine } from '@remixicon/react';
 import { IMAGE_QUALITY } from '@/constants';
 import { useToast } from '@/components/common/Toast';
+import { copyToClipboard } from '@/utils/clipboard';
 
 const Container = styled.div`
   display: flex;
@@ -132,13 +133,9 @@ function BlogDetailContent({ post }: BlogDetailContentProps) {
   const { showToast, ToastUI } = useToast();
 
   const handleCopyUrl = async () => {
-    try {
-      const url = `${window.location.origin}/blog/${id}`;
-      await navigator.clipboard.writeText(url);
-      showToast('게시글 링크가 복사되었습니다!');
-    } catch (err) {
-      console.error('URL 복사 실패', err);
-    }
+    const url = `${window.location.origin}/blog/${id}`;
+    const success = await copyToClipboard(url);
+    if (success) showToast('게시글 링크가 복사되었습니다!');
   };
 
   return (
