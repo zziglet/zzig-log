@@ -67,7 +67,7 @@ function AboutMeSection() {
     <SectionContainer>
       <ContentWrapper>
         <ProfileImageWrapper>
-          <Image src={INFO_IMAGES.homeIcon2} alt="Profile" fill sizes="(max-width: 768px) 200px, 400px" style={{ objectFit: 'cover' }} />
+          <Image src={INFO_IMAGES.homeIcon2} alt="Profile" fill sizes="(max-width: 768px) 200px, 400px" unoptimized style={{ objectFit: 'cover' }} />
         </ProfileImageWrapper>
 
         <InfoColumn>

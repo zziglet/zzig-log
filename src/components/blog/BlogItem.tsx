@@ -6,6 +6,7 @@ import { theme } from '@/styles/theme';
 import TagList from '@/components/common/TagList';
 import CategoryBadge from '@/components/common/CategoryBadge';
 import { BlogPost } from '@/types/blog';
+import { IMAGE_QUALITY } from '@/constants';
 
 const ItemContainer = styled.article`
   width: 100%;
@@ -101,7 +102,7 @@ function BlogItem({ post, onClick }: BlogItemProps) {
     <ItemContainer onClick={onClick}>
       {thumbnail ? (
         <ThumbnailWrapper>
-          <Image src={thumbnail} alt={`${title} thumbnail`} fill sizes="184px" style={{ objectFit: 'cover' }} />
+          <Image src={thumbnail} alt={`${title} thumbnail`} fill sizes="184px" quality={IMAGE_QUALITY} style={{ objectFit: 'cover' }} />
         </ThumbnailWrapper>
       ) : (
         <Placeholder />
