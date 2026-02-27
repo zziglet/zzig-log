@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [23.0]
+        node-version: [20]
 
     steps:
       # 1. 코드 체크아웃
@@ -31,7 +31,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
-      
+
       # 4. 의존성 설치
       - name: 'Install dependencies'
         run: pnpm install
@@ -40,7 +40,11 @@ jobs:
       - name: 'Run Lint'
         run: pnpm run lint
 
-      # 6. Next.js 빌드 실행
+      # 6. 테스트 실행
+      - name: 'Run Tests'
+        run: pnpm test
+
+      # 7. Next.js 빌드 실행
       - name: 'Run Next.js Build'
         run: pnpm run build
         env:
