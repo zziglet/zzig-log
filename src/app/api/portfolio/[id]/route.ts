@@ -1,11 +1,7 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
-import { NotionToMarkdown } from 'notion-to-md';
-import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
-import { notion, isFullPage, parsePortfolioPage } from '@/utils/notion';
+import { NextRequest, NextResponse } from 'next/server';
+import { getPortfolioPost } from '@/services/portfolio.service';
 
-const n2m = new NotionToMarkdown({ notionClient: notion });
-
-export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
   if (!id) {
@@ -13,22 +9,15 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   }
 
   try {
-    const [pageResponse, mdBlocks] = await Promise.all([notion.pages.retrieve({ page_id: id }), n2m.pageToMarkdown(id)]);
+    const post = await getPortfolioPost(id);
 
-    if (!isFullPage(pageResponse)) {
-      throw new Error('Invalid Page Response');
+    if (!post) {
+      return NextResponse.json({ error: 'Portfolio not found' }, { status: 404 });
     }
 
-    const metaData = parsePortfolioPage(pageResponse as PageObjectResponse);
-
-    const mdString = n2m.toMarkdownString(mdBlocks);
-
-    return NextResponse.json({
-      ...metaData,
-      content: mdString.parent,
-    });
+    return NextResponse.json(post);
   } catch (error) {
-    console.error('Portfolio Detail Error:', error);
+    console.error('Portfolio Detail API Error:', error);
     const errorMessage = error instanceof Error ? error.message : 'Unknown Error';
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
