@@ -13,7 +13,7 @@ if (!process.env.NOTION_DB_BLOG_ID) {
 }
 
 if (!process.env.NOTION_DB_PORTFOLIO_ID) {
-  throw new Error('NOTION_NOTION_DB_PORTFOLIO_ID environment variable is required');
+  throw new Error('NOTION_DB_PORTFOLIO_ID environment variable is required');
 }
 
 export const notion = new Client({
