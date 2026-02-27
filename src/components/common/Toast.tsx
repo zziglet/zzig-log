@@ -53,13 +53,14 @@ interface ToastState {
   visible: boolean;
   isExiting: boolean;
   message: string;
+  version: number;
 }
 
 export function useToast() {
-  const [state, setState] = useState<ToastState>({ visible: false, isExiting: false, message: '' });
+  const [state, setState] = useState<ToastState>({ visible: false, isExiting: false, message: '', version: 0 });
 
   const showToast = useCallback((message: string) => {
-    setState({ visible: true, isExiting: false, message });
+    setState((prev) => ({ visible: true, isExiting: false, message, version: prev.version + 1 }));
   }, []);
 
   useEffect(() => {
@@ -70,20 +71,20 @@ export function useToast() {
     }, TOAST_DURATION);
 
     return () => clearTimeout(timer);
-  }, [state.visible, state.isExiting]);
+  }, [state.visible, state.isExiting, state.version]);
 
   useEffect(() => {
     if (!state.isExiting) return;
 
     const timer = setTimeout(() => {
-      setState({ visible: false, isExiting: false, message: '' });
+      setState((prev) => ({ ...prev, visible: false, isExiting: false, message: '' }));
     }, EXIT_ANIMATION_DURATION);
 
     return () => clearTimeout(timer);
   }, [state.isExiting]);
 
   const ToastUI = state.visible ? (
-    <ToastWrapper isExiting={state.isExiting}>
+    <ToastWrapper isExiting={state.isExiting} role="status" aria-live="polite">
       <ToastContent>{state.message}</ToastContent>
     </ToastWrapper>
   ) : null;
