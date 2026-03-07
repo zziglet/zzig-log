@@ -1,92 +1,81 @@
-﻿name: 'Release Branch Deployment (Production)'
+name: 'Release Branch Check & Tagging'
 
 on:
   push:
     branches:
-      - release  # PR이 병합되어 'release' 브랜치에 코드가 들어오면 실행 (Production 배포)
+      - release
 
 jobs:
-  deploy-production:
-    name: 'Deploy to Vercel (Production)'
+  check-and-tag:
+    name: 'Lint, Test & Create Release Tag'
     runs-on: ubuntu-latest
-    env:
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    permissions:
+      contents: write
 
     strategy:
       matrix:
-        node-version: [20.0] # Vercel Node 버전에 맞춰 조정 (보통 LTS 권장)
+        node-version: [20]
 
     steps:
-      # 1. 코드 체크아웃
       - name: 'Checkout code'
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      # 2. pnpm 설치
       - name: 'Install pnpm'
         uses: pnpm/action-setup@v3
         with:
           version: 9
 
-      # 3. Node.js 환경 설정
       - name: 'Use Node.js ${{ matrix.node-version }}'
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
-      
-      # 4. 의존성 설치 (Lint 등을 위해 필요)
+
       - name: 'Install dependencies'
         run: pnpm install
 
-      # 5. Lint 실행 (코드 품질 확인)
       - name: 'Run Lint'
         run: pnpm run lint
 
-      # ----------------------------------------------------------------
-      # Vercel 배포 단계 (Vercel CLI 활용)
-      # ----------------------------------------------------------------
-      
-      # 6. Vercel CLI 설치
-      - name: 'Install Vercel CLI'
-        run: pnpm install -g vercel@latest
+      - name: 'Run Tests'
+        run: pnpm test
 
-      # 7. Vercel 환경 정보 가져오기 (Production 환경)
-      - name: 'Pull Vercel Environment Information'
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-
-      # 8. Vercel용 빌드 실행 (--prod 옵션이 중요)
-      # Vercel은 자체적인 빌드 시스템을 사용하므로 'pnpm run build' 대신 'vercel build'를 사용합니다.
-      # 이 명령어가 실행되면 .vercel/output 폴더에 배포 아티팩트가 생성됩니다.
-      - name: 'Build Project Artifacts'
-        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
-        env:
-          # 빌드 시 필요한 환경변수가 있다면 여기에 매핑하거나 Vercel 대시보드에서 설정해야 합니다.
-          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
-          NOTION_DB_BLOG_ID: ${{ secrets.NOTION_DB_BLOG_ID }}
-          NOTION_DB_PORTFOLIO_ID: ${{ secrets.NOTION_DB_PORTFOLIO_ID }}
-
-      # 9. 실제 Production 배포 실행 (--prebuilt --prod)
-      - name: 'Deploy Project Artifacts to Vercel'
-        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
-
-  create-release-tag:
-    name: 'Create Release Tag'
-    needs: deploy-production
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    steps:
-      - name: 'Checkout code'
-        uses: actions/checkout@v4
-
-      - name: 'Extract version from package.json'
+      - name: 'Determine next version from commit messages'
         id: version
         run: |
-          VERSION=$(node -p "require('./package.json').version")
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Extracted version: $VERSION"
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+
+          if [ -z "$LAST_TAG" ]; then
+            NEXT_VERSION="1.0.0"
+          else
+            if [ -n "$LAST_TAG" ]; then
+              COMMITS=$(git log "${LAST_TAG}..HEAD" --pretty=format:"%s" 2>/dev/null || echo "")
+            fi
+
+            CURRENT="${LAST_TAG#v}"
+            IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT"
+
+            BUMP="patch"
+            while IFS= read -r MSG; do
+              if echo "$MSG" | grep -qiE "^feat(\(.+\))?!:|BREAKING CHANGE"; then
+                BUMP="major"
+                break
+              elif echo "$MSG" | grep -qiE "^feat(\(.+\))?:"; then
+                BUMP="minor"
+              fi
+            done <<< "$COMMITS"
+
+            case "$BUMP" in
+              major) NEXT_VERSION="$((MAJOR + 1)).0.0" ;;
+              minor) NEXT_VERSION="${MAJOR}.$((MINOR + 1)).0" ;;
+              patch) NEXT_VERSION="${MAJOR}.${MINOR}.$((PATCH + 1))" ;;
+            esac
+          fi
+
+          echo "version=$NEXT_VERSION" >> $GITHUB_OUTPUT
+          echo "Next version: $NEXT_VERSION (bump: ${BUMP:-initial})"
 
       - name: 'Check if release already exists'
         id: check_release
