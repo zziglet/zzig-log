@@ -19,6 +19,8 @@ jobs:
     steps:
       - name: 'Checkout code'
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: 'Install pnpm'
         uses: pnpm/action-setup@v3
@@ -40,12 +42,40 @@ jobs:
       - name: 'Run Tests'
         run: pnpm test
 
-      - name: 'Extract version from package.json'
+      - name: 'Determine next version from commit messages'
         id: version
         run: |
-          VERSION=$(node -p "require('./package.json').version")
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Extracted version: $VERSION"
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+
+          if [ -z "$LAST_TAG" ]; then
+            NEXT_VERSION="1.0.0"
+          else
+            if [ -n "$LAST_TAG" ]; then
+              COMMITS=$(git log "${LAST_TAG}..HEAD" --pretty=format:"%s" 2>/dev/null || echo "")
+            fi
+
+            CURRENT="${LAST_TAG#v}"
+            IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT"
+
+            BUMP="patch"
+            while IFS= read -r MSG; do
+              if echo "$MSG" | grep -qiE "^feat(\(.+\))?!:|BREAKING CHANGE"; then
+                BUMP="major"
+                break
+              elif echo "$MSG" | grep -qiE "^feat(\(.+\))?:"; then
+                BUMP="minor"
+              fi
+            done <<< "$COMMITS"
+
+            case "$BUMP" in
+              major) NEXT_VERSION="$((MAJOR + 1)).0.0" ;;
+              minor) NEXT_VERSION="${MAJOR}.$((MINOR + 1)).0" ;;
+              patch) NEXT_VERSION="${MAJOR}.${MINOR}.$((PATCH + 1))" ;;
+            esac
+          fi
+
+          echo "version=$NEXT_VERSION" >> $GITHUB_OUTPUT
+          echo "Next version: $NEXT_VERSION (bump: ${BUMP:-initial})"
 
       - name: 'Check if release already exists'
         id: check_release
