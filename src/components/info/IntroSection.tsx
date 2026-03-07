@@ -1,5 +1,6 @@
 ﻿'use client';
 
+import Image from 'next/image';
 import styled from '@emotion/styled';
 import { SectionContainer, SectionTitle } from '@/styles/shared.styles';
 import { INFO_IMAGES } from '@/constants/info';
@@ -27,12 +28,6 @@ const SubTitle = styled.div`
   padding-top: 8px;
 `;
 
-const MainImage = styled.img`
-  width: 100%;
-  max-height: 600px;
-  object-fit: cover;
-`;
-
 function IntroSection() {
   return (
     <SectionContainer>
@@ -43,7 +38,7 @@ function IntroSection() {
         </Greeting>
         <SubTitle>Web Front-End Developer in Seoul, Korea</SubTitle>
       </DescriptionBox>
-      <MainImage src={INFO_IMAGES.homeIcon1} alt="Intro Main" />
+      <Image src={INFO_IMAGES.homeIcon1} alt="Intro Main" width={4776} height={1744} unoptimized style={{ width: '100%', height: 'auto' }} priority />
     </SectionContainer>
   );
 }

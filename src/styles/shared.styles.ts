@@ -1,4 +1,6 @@
-﻿import { theme } from '@/styles/theme';
+﻿'use client';
+
+import { theme } from '@/styles/theme';
 import styled from '@emotion/styled';
 
 export const SectionContainer = styled.section`
@@ -35,14 +37,10 @@ export const MarkdownBody = styled.div`
   color: ${theme.colors.text.body};
   font-size: 16px;
   line-height: 1.8;
-  padding: 12px 20px;
+  padding: 12px 0;
 
   @media (min-width: 768px) {
-    padding: 12px 60px;
-  }
-
-  @media (min-width: 1024px) {
-    padding: 12px 120px;
+    font-size: 17px;
   }
 
   h1,
@@ -111,4 +109,9 @@ export const PageContainer = styled.div`
   width: 100%;
   margin: 0 auto;
   padding: 60px 20px 100px;
+  box-sizing: border-box;
+
+  @media (min-width: 768px) {
+    padding-top: 80px;
+  }
 `;

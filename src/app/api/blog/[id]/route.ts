@@ -1,10 +1,7 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
-import { NotionToMarkdown } from 'notion-to-md';
-import { isFullPage, notion, parseBlogPost } from '@/utils/notion';
+import { NextRequest, NextResponse } from 'next/server';
+import { getBlogPost } from '@/services/blog.service';
 
-const n2m = new NotionToMarkdown({ notionClient: notion });
-
-export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
   if (!id) {
@@ -12,20 +9,15 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   }
 
   try {
-    const [pageResponse, mdBlocks] = await Promise.all([notion.pages.retrieve({ page_id: id }), n2m.pageToMarkdown(id)]);
-    if (!isFullPage(pageResponse)) {
-      throw new Error('Invalid Page Response');
+    const post = await getBlogPost(id);
+
+    if (!post) {
+      return NextResponse.json({ error: 'Post not found' }, { status: 404 });
     }
-    const metaData = parseBlogPost(pageResponse);
 
-    const mdString = n2m.toMarkdownString(mdBlocks);
-
-    return NextResponse.json({
-      ...metaData,
-      content: mdString.parent,
-    });
+    return NextResponse.json(post);
   } catch (error) {
-    console.error('Blog Detail Error:', error);
+    console.error('Blog Detail API Error:', error);
     const errorMessage = error instanceof Error ? error.message : 'Unknown Error';
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }

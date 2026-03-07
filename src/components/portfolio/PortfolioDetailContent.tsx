@@ -1,5 +1,6 @@
 ﻿'use client';
 
+import Image from 'next/image';
 import styled from '@emotion/styled';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -9,6 +10,9 @@ import TagList from '@/components/common/TagList';
 import CategoryBadge from '@/components/common/CategoryBadge';
 import { MarkdownBody } from '@/styles/shared.styles';
 import { RiGithubFill, RiGlobalLine, RiShareLine } from '@remixicon/react';
+import { IMAGE_QUALITY } from '@/constants';
+import { useToast } from '@/components/common/Toast';
+import { copyToClipboard } from '@/utils/clipboard';
 
 const Container = styled.div`
   display: flex;
@@ -78,12 +82,13 @@ const LinkButton = styled.a`
   }
 `;
 
-const HeroImage = styled.img`
+const HeroImageWrapper = styled.div`
+  position: relative;
   width: 100%;
   max-width: 800px;
-  max-height: 500px;
-  object-fit: cover;
+  aspect-ratio: 16 / 9;
   border-radius: 16px;
+  overflow: hidden;
   background-color: ${theme.colors.background.layer1};
 `;
 
@@ -102,15 +107,12 @@ interface PortfolioDetailContentProps {
 function PortfolioDetailContent({ post }: PortfolioDetailContentProps) {
   const { id, title, description, thumbnail, startDate, endDate, tags, category, content, webUrl, githubUrl } = post;
   const dateRange = `${startDate} ~ ${endDate || 'Ing'}`;
+  const { showToast, ToastUI } = useToast();
 
   const handleCopyUrl = async () => {
-    try {
-      const url = `${window.location.origin}/portfolio/${id}`;
-      await navigator.clipboard.writeText(url);
-      alert('포트폴리오 링크가 복사되었습니다!');
-    } catch (err) {
-      console.error('URL 복사 실패', err);
-    }
+    const url = `${window.location.origin}/portfolio/${id}`;
+    const success = await copyToClipboard(url);
+    if (success) showToast('포트폴리오 링크가 복사되었습니다!');
   };
 
   return (
@@ -139,7 +141,11 @@ function PortfolioDetailContent({ post }: PortfolioDetailContentProps) {
         </LinkButtonGroup>
       </TitleSection>
 
-      {thumbnail && <HeroImage src={thumbnail} alt={title} />}
+      {thumbnail && (
+        <HeroImageWrapper>
+          <Image src={thumbnail} alt={title} fill sizes="(max-width: 800px) 100vw, 800px" quality={IMAGE_QUALITY} style={{ objectFit: 'cover' }} priority />
+        </HeroImageWrapper>
+      )}
 
       <MetaSection>
         <CategoryBadge>{category}</CategoryBadge>
@@ -149,6 +155,8 @@ function PortfolioDetailContent({ post }: PortfolioDetailContentProps) {
       <MarkdownBody>
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
       </MarkdownBody>
+
+      {ToastUI}
     </Container>
   );
 }

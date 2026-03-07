@@ -12,7 +12,7 @@ const VisionContainer = styled(SectionContainer)`
   width: 100%;
   padding-top: 48px;
 
-  background-image: url('/images/home_3.png');
+  background-image: url('/images/home_3.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
