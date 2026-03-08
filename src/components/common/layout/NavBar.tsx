@@ -53,7 +53,7 @@ const LogoLabel = styled(Link)`
 const DesktopMenuGroup = styled.div`
   display: none;
 
-  @media (min-width: 768px) {
+  ${theme.media.tablet} {
     display: flex;
     align-items: center;
     gap: 32px;
@@ -82,7 +82,7 @@ const MobileMenuButton = styled.button`
   color: ${theme.colors.text.body};
   z-index: 1100;
 
-  @media (min-width: 768px) {
+  ${theme.media.tablet} {
     display: none;
   }
 `;

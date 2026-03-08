@@ -13,7 +13,7 @@ const StyledFooter = styled.footer`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 48px 40px;
+  padding: 48px 16px;
   box-sizing: border-box;
   text-align: left;
 
@@ -35,7 +35,7 @@ const FooterContainer = styled.div`
   gap: 20px;
   font-size: ${theme.textSizes.body.xs};
 
-  @media (max-width: 768px) {
+  ${theme.media.mobile} {
     flex-direction: column;
     align-items: center;
     text-align: center;
@@ -47,7 +47,7 @@ const FooterLeft = styled.div`
   align-items: flex-start;
   gap: 48px;
 
-  @media (max-width: 768px) {
+  ${theme.media.mobile} {
     flex-direction: column;
     align-items: center;
     gap: 32px;
@@ -60,7 +60,7 @@ const FooterRight = styled.div`
   align-items: flex-end;
   gap: 8px;
 
-  @media (max-width: 768px) {
+  ${theme.media.mobile} {
     align-items: center;
     text-align: center;
   }
@@ -74,7 +74,7 @@ const LinkGroup = styled.div`
   align-items: flex-start;
   gap: 8px;
 
-  @media (max-width: 768px) {
+  ${theme.media.mobile} {
     align-items: center;
   }
 `;
@@ -91,7 +91,7 @@ const LinkItem = styled.a`
   text-decoration: none;
   color: inherit;
 
-  @media (max-width: 768px) {
+  ${theme.media.mobile} {
     align-self: auto;
   }
 `;
@@ -103,7 +103,7 @@ const LogoWrapper = styled.div`
   justify-content: flex-end;
   gap: 10px;
 
-  @media (max-width: 768px) {
+  ${theme.media.mobile} {
     justify-content: center;
   }
 `;

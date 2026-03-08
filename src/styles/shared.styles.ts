@@ -43,7 +43,7 @@ export const MarkdownBody = styled.div`
   line-height: 1.8;
   padding: 12px 0;
 
-  @media (min-width: 768px) {
+  ${theme.media.tablet} {
     font-size: 17px;
   }
 
@@ -115,7 +115,7 @@ export const PageContainer = styled.div`
   padding: 60px 20px 100px;
   box-sizing: border-box;
 
-  @media (min-width: 768px) {
+  ${theme.media.tablet} {
     padding-top: 80px;
   }
 `;
