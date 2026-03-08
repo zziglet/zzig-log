@@ -11,17 +11,29 @@ import { IMAGE_QUALITY } from '@/constants';
 const CardContainer = styled.article`
   width: 100%;
   background-color: ${theme.colors.background.base};
-  border-radius: 24px;
+  border-radius: 16px;
   box-shadow: ${theme.effects.shadow};
-  padding: 24px;
+  padding: 16px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 14px;
   color: ${theme.colors.text.body};
   transition: transform 0.2s ease-in-out;
   cursor: pointer;
+
+  ${theme.media.tablet} {
+    border-radius: 20px;
+    padding: 20px;
+    gap: 18px;
+  }
+
+  ${theme.media.desktop} {
+    border-radius: 24px;
+    padding: 24px;
+    gap: 20px;
+  }
 
   &:hover {
     transform: translateY(-4px);
@@ -32,30 +44,62 @@ const ThumbnailWrapper = styled.div`
   position: relative;
   width: 100%;
   aspect-ratio: 320 / 200;
-  border-radius: 12px;
+  border-radius: 8px;
   overflow: hidden;
   background-color: ${theme.colors.background.layer1};
+
+  ${theme.media.tablet} {
+    border-radius: 10px;
+  }
+
+  ${theme.media.desktop} {
+    border-radius: 12px;
+  }
 `;
 
 const Placeholder = styled.div`
   width: 100%;
   aspect-ratio: 320 / 200;
   background-color: ${theme.colors.background.layer1};
-  border-radius: 12px;
+  border-radius: 8px;
+
+  ${theme.media.tablet} {
+    border-radius: 10px;
+  }
+
+  ${theme.media.desktop} {
+    border-radius: 12px;
+  }
 `;
 
 const ContentWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
+
+  ${theme.media.tablet} {
+    gap: 14px;
+  }
+
+  ${theme.media.desktop} {
+    gap: 16px;
+  }
 `;
 
 const Header = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
   align-items: flex-start;
+
+  ${theme.media.tablet} {
+    gap: 6px;
+  }
+
+  ${theme.media.desktop} {
+    gap: 8px;
+  }
 `;
 
 const Title = styled.div`
@@ -76,7 +120,15 @@ const Footer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 8px;
+  gap: 6px;
+
+  ${theme.media.tablet} {
+    gap: 8px;
+  }
+
+  ${theme.media.desktop} {
+    gap: 8px;
+  }
 `;
 
 interface PortfolioItemProps {
@@ -96,7 +148,7 @@ function PortfolioItem({ post, onClick }: PortfolioItemProps) {
             src={thumbnail}
             alt={`${title} thumbnail`}
             fill
-            sizes="(max-width: 768px) 100vw, 320px"
+            sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"
             quality={IMAGE_QUALITY}
             style={{ objectFit: 'cover' }}
           />

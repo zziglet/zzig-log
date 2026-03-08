@@ -112,7 +112,7 @@ export const MarkdownBody = styled.div`
 export const PageContainer = styled.div`
   width: 100%;
   margin: 0 auto;
-  padding: 60px 0 100px;
+  padding: 20px 0 100px;
   box-sizing: border-box;
 
   ${theme.media.tablet} {
