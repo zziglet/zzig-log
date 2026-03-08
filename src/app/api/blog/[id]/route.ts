@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getBlogPost } from '@/services/blog.service';
-import { REVALIDATE_DETAIL } from '@/constants/cache';
-
-export const revalidate = REVALIDATE_DETAIL;
 
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

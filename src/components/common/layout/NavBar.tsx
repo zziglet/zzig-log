@@ -58,6 +58,12 @@ const DesktopMenuGroup = styled.div`
     align-items: center;
     gap: 32px;
   }
+
+  ${theme.media.desktop} {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
 `;
 
 const MenuLabel = styled(Link, {
@@ -83,6 +89,10 @@ const MobileMenuButton = styled.button`
   z-index: 1100;
 
   ${theme.media.tablet} {
+    display: none;
+  }
+
+  ${theme.media.desktop} {
     display: none;
   }
 `;
