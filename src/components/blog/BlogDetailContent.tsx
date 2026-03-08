@@ -21,12 +21,11 @@ const Container = styled.div`
 
 const BackButtonLink = styled(Link)`
   display: inline-flex;
+  align-items: center;
   align-self: flex-start;
-  gap: 4px;
   text-decoration: none;
-  color: ${theme.colors.cream[600]};
-  font-size: ${theme.textSizes.body.md};
-  font-weight: 500;
+  color: ${theme.colors.text.disabled};
+  margin-bottom: 16px;
 
   &:hover {
     color: ${theme.colors.cream[700]};
@@ -44,8 +43,18 @@ const TitleSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-  padding-bottom: 24px;
+  gap: 12px;
+  padding-bottom: 16px;
+
+  ${theme.media.tablet} {
+    gap: 16px;
+    padding-bottom: 24px;
+  }
+
+  ${theme.media.desktop} {
+    gap: 16px;
+    padding-bottom: 24px;
+  }
 `;
 
 const ActionGroup = styled.div`
@@ -59,10 +68,18 @@ const HeroImageWrapper = styled.div`
   width: 100%;
   max-width: 800px;
   aspect-ratio: 16 / 9;
-  border-radius: 16px;
+  border-radius: 12px;
   overflow: hidden;
   background-color: ${theme.colors.background.layer1};
-  margin: 24px 0;
+  margin: 16px 0;
+
+  ${theme.media.tablet} {
+    border-radius: 16px;
+  }
+
+  ${theme.media.desktop} {
+    border-radius: 16px;
+  }
 `;
 
 const Placeholder = styled.div`
@@ -70,9 +87,17 @@ const Placeholder = styled.div`
   max-width: 800px;
   max-height: 400px;
   aspect-ratio: 16 / 9;
-  border-radius: 16px;
+  border-radius: 12px;
   background-color: ${theme.colors.background.layer2};
-  margin: 24px 0;
+  margin: 16px 0;
+
+  ${theme.media.tablet} {
+    border-radius: 16px;
+  }
+
+  ${theme.media.desktop} {
+    border-radius: 16px;
+  }
 `;
 
 interface BlogDetailContentProps {
@@ -92,7 +117,7 @@ function BlogDetailContent({ post }: BlogDetailContentProps) {
   return (
     <Container>
       <BackButtonLink href="/blog" aria-label="목록으로 돌아가기">
-        <RiArrowLeftLine size={28} />
+        <RiArrowLeftLine size={20} />
       </BackButtonLink>
 
       <TitleSection>
