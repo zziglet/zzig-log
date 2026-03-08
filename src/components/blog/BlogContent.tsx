@@ -3,14 +3,14 @@
 import { useState, useMemo } from 'react';
 import BlogList from '@/components/blog/BlogList';
 import CategoryTabBar from '@/components/blog/CategoryTabBar';
-import { BlogPost } from '@/types/blog';
+import { BlogPost, CategoryType } from '@/types/blog';
 
 interface BlogContentProps {
   posts: BlogPost[];
 }
 
 function BlogContent({ posts }: BlogContentProps) {
-  const [selectedCategory, setSelectedCategory] = useState<string>('전체');
+  const [selectedCategory, setSelectedCategory] = useState<CategoryType>('전체');
 
   const filteredPosts = useMemo(() => {
     if (selectedCategory === '전체') {

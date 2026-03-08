@@ -2,7 +2,7 @@
 
 import styled from '@emotion/styled';
 import { theme } from '@/styles/theme';
-import { CATEGORIES } from '@/types/blog';
+import { CATEGORIES, CategoryType } from '@/types/blog';
 
 const TabContainer = styled.div`
   width: 100%;
@@ -53,8 +53,8 @@ const TabItem = styled.button<{ isActive: boolean }>`
 `;
 
 interface CategoryTabBarProps {
-  selectedCategory: string;
-  onSelect: (category: string) => void;
+  selectedCategory: CategoryType;
+  onSelect: (category: CategoryType) => void;
 }
 
 function CategoryTabBar({ selectedCategory, onSelect }: CategoryTabBarProps) {
