@@ -24,6 +24,15 @@ export const notion = new Client({
 export const BLOG_DB_ID = process.env.NOTION_DB_BLOG_ID || '';
 export const PORTFOLIO_DB_ID = process.env.NOTION_DB_PORTFOLIO_ID || '';
 
+export function getDataSourceId(dbResponse: unknown): string | undefined {
+  const record = dbResponse as Record<string, unknown>;
+  const dataSources = record.data_sources;
+  if (Array.isArray(dataSources) && dataSources.length > 0) {
+    return (dataSources[0] as Record<string, unknown>)?.id as string | undefined;
+  }
+  return undefined;
+}
+
 export function isFullPage(response: unknown): response is PageObjectResponse {
   return (
     typeof response === 'object' &&
