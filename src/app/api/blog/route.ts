@@ -1,21 +1,19 @@
-﻿import { NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
-import { BLOG_DB_ID, isFullPage, notion, parseBlogPost } from '@/utils/notion';
+import { BLOG_DB_ID, getDataSourceId, isFullPage, notion, parseBlogPost } from '@/utils/notion';
+import { unstable_cache } from 'next/cache';
+import { REVALIDATE_LIST } from '@/constants/cache';
 
-export async function GET() {
-  if (!BLOG_DB_ID) {
-    return NextResponse.json({ error: 'Missing NOTION_DATABASE_ID' }, { status: 500 });
-  }
-
-  try {
+const getCachedBlogList = unstable_cache(
+  async () => {
     const dbResponse = await notion.databases.retrieve({
       database_id: BLOG_DB_ID,
     });
 
-    const dataSourceId = (dbResponse as any).data_sources?.[0]?.id;
+    const dataSourceId = getDataSourceId(dbResponse);
 
     if (!dataSourceId) {
-      return NextResponse.json({ error: 'Data Source ID not found' }, { status: 404 });
+      return null;
     }
 
     const response = await notion.dataSources.query({
@@ -28,7 +26,23 @@ export async function GET() {
       ],
     });
 
-    const posts = response.results.filter(isFullPage).map((post: PageObjectResponse) => parseBlogPost(post));
+    return response.results.filter(isFullPage).map((post: PageObjectResponse) => parseBlogPost(post));
+  },
+  ['blog-list'],
+  { revalidate: REVALIDATE_LIST },
+);
+
+export async function GET() {
+  if (!BLOG_DB_ID) {
+    return NextResponse.json({ error: 'Missing NOTION_DATABASE_ID' }, { status: 500 });
+  }
+
+  try {
+    const posts = await getCachedBlogList();
+
+    if (!posts) {
+      return NextResponse.json({ error: 'Data Source ID not found' }, { status: 404 });
+    }
 
     return NextResponse.json(posts);
   } catch (error) {

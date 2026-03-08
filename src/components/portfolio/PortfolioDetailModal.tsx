@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import styled from '@emotion/styled';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { theme } from '@/styles/theme';
 import { PortfolioDetail } from '@/types/portfolio';
 import { RiFullscreenLine, RiCloseLine } from '@remixicon/react';
@@ -20,22 +20,40 @@ const Backdrop = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 12px;
   box-sizing: border-box;
+
+  ${theme.media.tablet} {
+    padding: 20px;
+  }
+
+  ${theme.media.desktop} {
+    padding: 20px;
+  }
 `;
 
 const ModalContainer = styled.div`
   width: 100%;
   max-width: 800px;
-  height: 90vh;
+  height: 95vh;
   background-color: ${theme.colors.background.base};
-  border-radius: 24px;
+  border-radius: 16px;
   box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   position: relative;
   animation: slideUp 0.3s ease-out;
+
+  ${theme.media.tablet} {
+    height: 90vh;
+    border-radius: 24px;
+  }
+
+  ${theme.media.desktop} {
+    height: 90vh;
+    border-radius: 24px;
+  }
 
   @keyframes slideUp {
     from {
@@ -59,7 +77,7 @@ const ModalHeader = styled.div`
   z-index: 10;
 `;
 
-const ControlButton = styled.button`
+const controlButtonStyles = `
   background: none;
   border: none;
   border-radius: 8px;
@@ -70,6 +88,7 @@ const ControlButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  text-decoration: none;
 
   &:hover {
     background-color: ${theme.colors.background.layer1};
@@ -77,10 +96,26 @@ const ControlButton = styled.button`
   }
 `;
 
+const ControlButton = styled.button`
+  ${controlButtonStyles}
+`;
+
+const ControlLink = styled(Link)`
+  ${controlButtonStyles}
+`;
+
 const ScrollArea = styled.div`
   flex: 1;
   overflow-y: auto;
-  padding: 0 40px 40px 40px;
+  padding: 0 16px 32px 16px;
+
+  ${theme.media.tablet} {
+    padding: 0 32px 40px 32px;
+  }
+
+  ${theme.media.desktop} {
+    padding: 0 40px 40px 40px;
+  }
 
   &::-webkit-scrollbar {
     width: 8px;
@@ -98,8 +133,6 @@ interface PortfolioModalProps {
 }
 
 function PortfolioDetailModal({ isOpen, onClose, post }: PortfolioModalProps) {
-  const router = useRouter();
-
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -113,17 +146,13 @@ function PortfolioDetailModal({ isOpen, onClose, post }: PortfolioModalProps) {
 
   if (!isOpen || !post) return null;
 
-  const handleFullPage = () => {
-    router.push(`/portfolio/${post.id}`);
-  };
-
   return (
     <Backdrop onClick={onClose}>
       <ModalContainer onClick={(e) => e.stopPropagation()}>
         <ModalHeader>
-          <ControlButton onClick={handleFullPage} title="새 탭에서 전체 보기">
+          <ControlLink href={`/portfolio/${post.id}`} title="전체 페이지로 보기">
             <RiFullscreenLine size={24} />
-          </ControlButton>
+          </ControlLink>
           <ControlButton onClick={onClose} title="닫기">
             <RiCloseLine size={24} />
           </ControlButton>

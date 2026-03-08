@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import Image from 'next/image';
 import styled from '@emotion/styled';
@@ -8,13 +8,22 @@ import { theme } from '@/styles/theme';
 
 const DescriptionBox = styled.div`
   text-align: left;
-  padding-bottom: 32px;
+  padding-bottom: 20px;
+
+  ${theme.media.tablet} {
+    padding-bottom: 28px;
+  }
+
+  ${theme.media.desktop} {
+    padding-bottom: 32px;
+  }
 `;
 
 const Greeting = styled.div`
   font-size: ${theme.textSizes.body.sm};
   color: ${theme.colors.text.body};
   font-weight: bold;
+  line-height: 1.6;
 `;
 
 const HighlightName = styled.span`

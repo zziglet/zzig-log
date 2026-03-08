@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { FOOTER_LINKS, GITHUB_LINK } from '@/constants/footer';
 import { theme } from '@/styles/theme';
@@ -13,24 +13,31 @@ const StyledFooter = styled.footer`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 48px 40px;
+  padding: 32px 16px;
   box-sizing: border-box;
   text-align: left;
+
+  ${theme.media.tablet} {
+    padding: 48px 24px;
+  }
+
+  ${theme.media.desktop} {
+    padding: 48px 40px;
+  }
 `;
 
 const FooterContainer = styled.div`
   width: 100%;
   max-width: 1200px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 20px;
   font-size: ${theme.textSizes.body.xs};
 
-  @media (max-width: 768px) {
+  ${theme.media.mobile} {
     flex-direction: column;
-    align-items: center;
-    text-align: center;
+    gap: 24px;
   }
 `;
 
@@ -39,10 +46,10 @@ const FooterLeft = styled.div`
   align-items: flex-start;
   gap: 48px;
 
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: center;
-    gap: 32px;
+  ${theme.media.mobile} {
+    gap: 0;
+    width: 100%;
+    justify-content: space-between;
   }
 `;
 
@@ -50,11 +57,14 @@ const FooterRight = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 8px;
+  gap: 6px;
 
-  @media (max-width: 768px) {
-    align-items: center;
-    text-align: center;
+  ${theme.media.mobile} {
+    align-items: flex-start;
+    gap: 4px;
+    padding-top: 8px;
+    border-top: 1px solid ${theme.colors.border.light};
+    width: 100%;
   }
 `;
 
@@ -66,8 +76,9 @@ const LinkGroup = styled.div`
   align-items: flex-start;
   gap: 8px;
 
-  @media (max-width: 768px) {
-    align-items: center;
+  ${theme.media.mobile} {
+    width: auto;
+    gap: 6px;
   }
 `;
 
@@ -82,10 +93,6 @@ const LinkItem = styled.a`
   cursor: pointer;
   text-decoration: none;
   color: inherit;
-
-  @media (max-width: 768px) {
-    align-self: auto;
-  }
 `;
 
 const LogoWrapper = styled.div`
@@ -95,14 +102,19 @@ const LogoWrapper = styled.div`
   justify-content: flex-end;
   gap: 10px;
 
-  @media (max-width: 768px) {
-    justify-content: center;
+  ${theme.media.mobile} {
+    justify-content: flex-start;
   }
 `;
 
 const LogoIcon = styled(RiGithubFill)`
   width: 22px;
   height: 22px;
+
+  ${theme.media.mobile} {
+    width: 18px;
+    height: 18px;
+  }
 `;
 
 const DescriptionLabel = styled.div`
@@ -147,7 +159,6 @@ function Footer() {
             </IconLink>
             <DescriptionLabel>zzig.log</DescriptionLabel>
           </LogoWrapper>
-          <DescriptionLabel>zzig.log | 대표 : 정지원</DescriptionLabel>
           <DescriptionLabel>©{currentYear} zziglet. All rights reserved</DescriptionLabel>
         </FooterRight>
       </FooterContainer>
