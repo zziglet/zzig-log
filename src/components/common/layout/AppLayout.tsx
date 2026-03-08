@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 import styled from '@emotion/styled';
 import { NavBar } from '@/components/common/layout/NavBar';
 import { Footer } from '@/components/common/layout/Footer';
+import ScrollToTop from '@/components/common/ScrollToTop';
 import { theme } from '@/styles/theme';
 
 const RootContainer = styled.div`
@@ -36,6 +37,7 @@ interface AppLayoutProps {
 function AppLayout({ children }: AppLayoutProps) {
   return (
     <RootContainer>
+      <ScrollToTop />
       <NavBar />
       <MainContent>
         <Container className="container">{children}</Container>
