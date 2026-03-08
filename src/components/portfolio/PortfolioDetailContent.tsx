@@ -24,8 +24,18 @@ const TitleSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
-  padding-bottom: 24px;
+  gap: 10px;
+  padding-bottom: 16px;
+
+  ${theme.media.tablet} {
+    gap: 12px;
+    padding-bottom: 24px;
+  }
+
+  ${theme.media.desktop} {
+    gap: 12px;
+    padding-bottom: 24px;
+  }
 `;
 
 const LinkButtonGroup = styled.div`
@@ -39,17 +49,35 @@ const HeroImageWrapper = styled.div`
   width: 100%;
   max-width: 800px;
   aspect-ratio: 16 / 9;
-  border-radius: 16px;
+  border-radius: 12px;
   overflow: hidden;
   background-color: ${theme.colors.background.layer1};
+
+  ${theme.media.tablet} {
+    border-radius: 16px;
+  }
+
+  ${theme.media.desktop} {
+    border-radius: 16px;
+  }
 `;
 
 const MetaSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
-  padding: 32px 0;
+  gap: 10px;
+  padding: 24px 0;
+
+  ${theme.media.tablet} {
+    gap: 12px;
+    padding: 32px 0;
+  }
+
+  ${theme.media.desktop} {
+    gap: 12px;
+    padding: 32px 0;
+  }
 `;
 
 interface PortfolioDetailContentProps {
