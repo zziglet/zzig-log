@@ -112,10 +112,72 @@ export const MarkdownBody = styled.div`
 export const PageContainer = styled.div`
   width: 100%;
   margin: 0 auto;
-  padding: 60px 20px 100px;
+  padding: 60px 0 100px;
   box-sizing: border-box;
 
   ${theme.media.tablet} {
     padding-top: 80px;
   }
+`;
+
+export const DetailMainTitle = styled.h1`
+  font-size: ${theme.textSizes.heading['3xl']};
+  font-weight: 800;
+  color: ${theme.colors.text.body};
+  margin: 0;
+  line-height: 1.3;
+  word-break: keep-all;
+  text-align: center;
+
+  ${theme.media.tablet} {
+    font-size: ${theme.textSizes.heading['2xl']};
+  }
+
+  ${theme.media.desktop} {
+    font-size: ${theme.textSizes.heading['2xl']};
+  }
+`;
+
+export const DetailSubTitle = styled.p`
+  font-size: ${theme.textSizes.body.lg};
+  color: ${theme.colors.text.body};
+  margin: 0;
+  font-weight: 400;
+  line-height: 1.5;
+  word-break: keep-all;
+  text-align: center;
+`;
+
+export const DetailDateBadge = styled.span`
+  font-size: ${theme.textSizes.body.sm};
+  color: ${theme.colors.text.disabled};
+  font-weight: 500;
+`;
+
+const detailIconStyles = `
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background-color: ${theme.colors.cream[50]};
+  color: ${theme.colors.text.body};
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+
+  &:hover {
+    background-color: ${theme.colors.cream[100]};
+    transform: translateY(-2px);
+  }
+`;
+
+export const DetailIconButton = styled.button`
+  ${detailIconStyles}
+`;
+
+export const DetailIconLink = styled.a`
+  ${detailIconStyles}
 `;

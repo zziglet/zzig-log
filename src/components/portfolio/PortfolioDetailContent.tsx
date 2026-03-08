@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import Image from 'next/image';
 import styled from '@emotion/styled';
@@ -8,7 +8,7 @@ import { PortfolioDetail } from '@/types/portfolio';
 import { theme } from '@/styles/theme';
 import TagList from '@/components/common/TagList';
 import CategoryBadge from '@/components/common/CategoryBadge';
-import { MarkdownBody } from '@/styles/shared.styles';
+import { MarkdownBody, DetailMainTitle, DetailSubTitle, DetailDateBadge, DetailIconButton, DetailIconLink } from '@/styles/shared.styles';
 import { RiGithubFill, RiGlobalLine, RiShareLine } from '@remixicon/react';
 import { IMAGE_QUALITY } from '@/constants';
 import { useToast } from '@/components/common/Toast';
@@ -28,58 +28,10 @@ const TitleSection = styled.div`
   padding-bottom: 24px;
 `;
 
-const DateBadge = styled.span`
-  font-size: ${theme.textSizes.body.sm};
-  color: ${theme.colors.text.disabled};
-  font-weight: 500;
-`;
-
-const MainTitle = styled.h2`
-  font-size: 32px;
-  font-weight: 800;
-  color: ${theme.colors.text.body};
-  margin: 0;
-  line-height: 1.3;
-  word-break: keep-all;
-
-  @media (min-width: 768px) {
-    font-size: 36px;
-  }
-`;
-
-const SubTitle = styled.p`
-  font-size: 20px;
-  color: ${theme.colors.text.body};
-  margin: 0;
-  font-weight: 400;
-  line-height: 1.5;
-  word-break: keep-all;
-`;
-
 const LinkButtonGroup = styled.div`
   display: flex;
   gap: 12px;
   padding-top: 8px;
-`;
-
-const LinkButton = styled.a`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background-color: ${theme.colors.cream[50]};
-  color: ${theme.colors.text.body};
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
-  text-decoration: none;
-
-  &:hover {
-    background-color: ${theme.colors.cream[100]};
-    transform: translateY(-2px);
-  }
 `;
 
 const HeroImageWrapper = styled.div`
@@ -118,26 +70,26 @@ function PortfolioDetailContent({ post }: PortfolioDetailContentProps) {
   return (
     <Container>
       <TitleSection>
-        <DateBadge>{dateRange}</DateBadge>
-        <MainTitle>{title}</MainTitle>
-        <SubTitle>{description}</SubTitle>
+        <DetailDateBadge>{dateRange}</DetailDateBadge>
+        <DetailMainTitle>{title}</DetailMainTitle>
+        <DetailSubTitle>{description}</DetailSubTitle>
 
         <LinkButtonGroup>
           {githubUrl && (
-            <LinkButton href={githubUrl} target="_blank" rel="noopener noreferrer" title="Github 저장소">
+            <DetailIconLink href={githubUrl} target="_blank" rel="noopener noreferrer" title="Github 저장소">
               <RiGithubFill size={24} />
-            </LinkButton>
+            </DetailIconLink>
           )}
 
           {webUrl && (
-            <LinkButton href={webUrl} target="_blank" rel="noopener noreferrer" title="웹사이트 방문">
+            <DetailIconLink href={webUrl} target="_blank" rel="noopener noreferrer" title="웹사이트 방문">
               <RiGlobalLine size={24} />
-            </LinkButton>
+            </DetailIconLink>
           )}
 
-          <LinkButton as="button" onClick={handleCopyUrl} title="링크 복사">
+          <DetailIconButton onClick={handleCopyUrl} title="링크 복사">
             <RiShareLine size={24} />
-          </LinkButton>
+          </DetailIconButton>
         </LinkButtonGroup>
       </TitleSection>
 
