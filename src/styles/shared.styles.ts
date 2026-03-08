@@ -21,10 +21,14 @@ export const SectionTitle = styled.div`
   font-weight: 200;
   color: ${theme.colors.cream[600]};
   line-height: 1;
-  padding: 52px 0;
+  padding: 24px 0;
 
-  @media (max-width: 768px) {
-    padding: 32px 0;
+  ${theme.media.tablet} {
+    padding: 40px 0;
+  }
+
+  ${theme.media.desktop} {
+    padding: 52px 0;
   }
 `;
 

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import Image from 'next/image';
 import styled from '@emotion/styled';
@@ -8,58 +8,93 @@ import { theme } from '@/styles/theme';
 
 const ContentWrapper = styled.div`
   display: flex;
-  gap: 32px;
-  align-items: flex-end;
-  padding: 72px 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 40px 0;
 
-  @media (max-width: 1024px) {
-    flex-direction: column;
-    align-items: center;
+  ${theme.media.tablet} {
+    gap: 32px;
+    padding: 56px 0;
+  }
+
+  ${theme.media.desktop} {
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 48px;
+    padding: 72px 0;
   }
 `;
 
 const ProfileImageWrapper = styled.div`
   position: relative;
-  width: 400px;
+  width: 200px;
   aspect-ratio: 3 / 4;
 
-  @media (max-width: 768px) {
-    width: 200px;
+  ${theme.media.tablet} {
+    width: 300px;
+  }
+
+  ${theme.media.desktop} {
+    width: 400px;
   }
 `;
 
 const InfoColumn = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 28px;
   flex: 1;
+  width: 100%;
+
+  ${theme.media.desktop} {
+    gap: 40px;
+  }
 `;
 
 const InfoGroup = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
+
+  ${theme.media.tablet} {
+    gap: 16px;
+  }
 `;
 
 const InfoRow = styled.div`
   display: flex;
+  flex-direction: column;
+  gap: 2px;
   font-size: ${theme.textSizes.body.xs};
   color: ${theme.colors.text.body};
+
+  ${theme.media.tablet} {
+    flex-direction: row;
+    gap: 0;
+  }
 `;
 
 const Label = styled.span`
-  width: 240px;
   font-weight: bold;
   color: ${theme.colors.peach[500]};
 
-  @media (max-width: 768px) {
-    width: 160px;
+  ${theme.media.tablet} {
+    width: 200px;
+    flex-shrink: 0;
+  }
+
+  ${theme.media.desktop} {
+    width: 240px;
   }
 `;
 
 const Value = styled.span`
-  flex: 1;
   color: ${theme.colors.text.body};
+
+  ${theme.media.tablet} {
+    flex: 1;
+  }
 `;
 
 function AboutMeSection() {
@@ -67,7 +102,14 @@ function AboutMeSection() {
     <SectionContainer>
       <ContentWrapper>
         <ProfileImageWrapper>
-          <Image src={INFO_IMAGES.homeIcon2} alt="Profile" fill sizes="(max-width: 768px) 200px, 400px" unoptimized style={{ objectFit: 'cover' }} />
+          <Image
+            src={INFO_IMAGES.homeIcon2}
+            alt="Profile"
+            fill
+            sizes="(max-width: 767px) 200px, (max-width: 1023px) 300px, 400px"
+            unoptimized
+            style={{ objectFit: 'cover' }}
+          />
         </ProfileImageWrapper>
 
         <InfoColumn>
