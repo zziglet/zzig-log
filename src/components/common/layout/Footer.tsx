@@ -16,6 +16,14 @@ const StyledFooter = styled.footer`
   padding: 48px 40px;
   box-sizing: border-box;
   text-align: left;
+
+  ${theme.media.tablet} {
+    padding: 48px 24px;
+  }
+
+  ${theme.media.desktop} {
+    padding: 48px 40px;
+  }
 `;
 
 const FooterContainer = styled.div`
