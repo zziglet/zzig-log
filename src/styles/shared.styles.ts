@@ -21,10 +21,14 @@ export const SectionTitle = styled.div`
   font-weight: 200;
   color: ${theme.colors.cream[600]};
   line-height: 1;
-  padding: 52px 0;
+  padding: 24px 0;
 
-  @media (max-width: 768px) {
-    padding: 32px 0;
+  ${theme.media.tablet} {
+    padding: 40px 0;
+  }
+
+  ${theme.media.desktop} {
+    padding: 52px 0;
   }
 `;
 
@@ -39,7 +43,7 @@ export const MarkdownBody = styled.div`
   line-height: 1.8;
   padding: 12px 0;
 
-  @media (min-width: 768px) {
+  ${theme.media.tablet} {
     font-size: 17px;
   }
 
@@ -111,7 +115,7 @@ export const PageContainer = styled.div`
   padding: 60px 20px 100px;
   box-sizing: border-box;
 
-  @media (min-width: 768px) {
+  ${theme.media.tablet} {
     padding-top: 80px;
   }
 `;

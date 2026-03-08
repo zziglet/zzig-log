@@ -18,11 +18,16 @@ const StyledNav = styled.nav`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 24px;
+  padding: 0 16px;
   box-sizing: border-box;
   background-color: ${theme.colors.background.base};
 
-  @media (min-width: 768px) {
+  ${theme.media.tablet} {
+    height: 100px;
+    padding: 0 24px;
+  }
+
+  ${theme.media.desktop} {
     height: 100px;
     padding: 0 40px;
   }
@@ -48,7 +53,7 @@ const LogoLabel = styled(Link)`
 const DesktopMenuGroup = styled.div`
   display: none;
 
-  @media (min-width: 768px) {
+  ${theme.media.tablet} {
     display: flex;
     align-items: center;
     gap: 32px;
@@ -77,7 +82,7 @@ const MobileMenuButton = styled.button`
   color: ${theme.colors.text.body};
   z-index: 1100;
 
-  @media (min-width: 768px) {
+  ${theme.media.tablet} {
     display: none;
   }
 `;
