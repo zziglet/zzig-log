@@ -16,6 +16,8 @@ const TabContainer = styled.div`
   box-sizing: border-box;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 
   &::-webkit-scrollbar {
     display: none;

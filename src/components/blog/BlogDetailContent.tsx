@@ -117,7 +117,7 @@ function BlogDetailContent({ post }: BlogDetailContentProps) {
   return (
     <Container>
       <BackButtonLink href="/blog" aria-label="목록으로 돌아가기">
-        <RiArrowLeftLine size={20} />
+        <RiArrowLeftLine size={20} aria-hidden="true" />
       </BackButtonLink>
 
       <TitleSection>

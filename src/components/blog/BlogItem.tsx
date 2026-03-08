@@ -32,13 +32,10 @@ const ItemContainer = styled.article`
   }
 `;
 
-const ThumbnailWrapper = styled.div`
-  position: relative;
+const baseThumbnailStyles = `
   width: 80px;
   height: 80px;
   border-radius: 8px;
-  overflow: hidden;
-  background-color: ${theme.colors.background.layer1};
   flex-shrink: 0;
 
   ${theme.media.tablet} {
@@ -54,24 +51,16 @@ const ThumbnailWrapper = styled.div`
   }
 `;
 
+const ThumbnailWrapper = styled.div`
+  ${baseThumbnailStyles}
+  position: relative;
+  overflow: hidden;
+  background-color: ${theme.colors.background.layer1};
+`;
+
 const Placeholder = styled.div`
-  width: 80px;
-  height: 80px;
-  border-radius: 8px;
+  ${baseThumbnailStyles}
   background-color: ${theme.colors.background.layer2};
-  flex-shrink: 0;
-
-  ${theme.media.tablet} {
-    width: 140px;
-    height: 140px;
-    border-radius: 10px;
-  }
-
-  ${theme.media.desktop} {
-    width: 164px;
-    height: 164px;
-    border-radius: 12px;
-  }
 `;
 
 const ContentWrapper = styled.div`

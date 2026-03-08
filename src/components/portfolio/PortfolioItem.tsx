@@ -65,10 +65,13 @@ const Title = styled.div`
   color: ${theme.colors.text.body};
   line-height: 1.4;
   word-break: keep-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
-  overflow: hidden;
+  white-space: unset;
 
   ${theme.media.tablet} {
     font-size: ${theme.textSizes.body.md};
