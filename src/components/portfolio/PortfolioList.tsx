@@ -9,16 +9,17 @@ const GridContainer = styled.div`
   display: grid;
   width: 100%;
   padding: 8px 0 52px 0;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
 
-  grid-template-columns: repeat(1, 1fr);
-  gap: 32px;
-
-  @media (min-width: 768px) {
+  ${theme.media.tablet} {
     grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
   }
 
-  @media (min-width: 1024px) {
+  ${theme.media.desktop} {
     grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
   }
 `;
 

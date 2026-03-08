@@ -20,22 +20,40 @@ const Backdrop = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 12px;
   box-sizing: border-box;
+
+  ${theme.media.tablet} {
+    padding: 20px;
+  }
+
+  ${theme.media.desktop} {
+    padding: 20px;
+  }
 `;
 
 const ModalContainer = styled.div`
   width: 100%;
   max-width: 800px;
-  height: 90vh;
+  height: 95vh;
   background-color: ${theme.colors.background.base};
-  border-radius: 24px;
+  border-radius: 16px;
   box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   position: relative;
   animation: slideUp 0.3s ease-out;
+
+  ${theme.media.tablet} {
+    height: 90vh;
+    border-radius: 24px;
+  }
+
+  ${theme.media.desktop} {
+    height: 90vh;
+    border-radius: 24px;
+  }
 
   @keyframes slideUp {
     from {
@@ -80,7 +98,15 @@ const ControlButton = styled.button`
 const ScrollArea = styled.div`
   flex: 1;
   overflow-y: auto;
-  padding: 0 40px 40px 40px;
+  padding: 0 16px 32px 16px;
+
+  ${theme.media.tablet} {
+    padding: 0 32px 40px 32px;
+  }
+
+  ${theme.media.desktop} {
+    padding: 0 40px 40px 40px;
+  }
 
   &::-webkit-scrollbar {
     width: 8px;

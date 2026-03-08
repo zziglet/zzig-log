@@ -1,82 +1,96 @@
-﻿'use client';
+'use client';
 
 import Image from 'next/image';
 import styled from '@emotion/styled';
 import { PortfolioPost } from '@/types/portfolio';
 import { theme } from '@/styles/theme';
-import TagList from '@/components/common/TagList';
-import CategoryBadge from '@/components/common/CategoryBadge';
 import { IMAGE_QUALITY } from '@/constants';
 
 const CardContainer = styled.article`
   width: 100%;
-  background-color: ${theme.colors.background.base};
-  border-radius: 24px;
-  box-shadow: ${theme.effects.shadow};
-  padding: 24px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  color: ${theme.colors.text.body};
-  transition: transform 0.2s ease-in-out;
+  border: 1px solid ${theme.colors.border.light};
+  border-radius: 12px;
+  overflow: hidden;
   cursor: pointer;
+  transition: border-color 0.2s ease-in-out;
+
+  ${theme.media.tablet} {
+    border-radius: 14px;
+  }
+
+  ${theme.media.desktop} {
+    border-radius: 16px;
+  }
 
   &:hover {
-    transform: translateY(-4px);
+    border-color: ${theme.colors.cream[400]};
   }
 `;
 
 const ThumbnailWrapper = styled.div`
   position: relative;
   width: 100%;
-  aspect-ratio: 320 / 200;
-  border-radius: 12px;
-  overflow: hidden;
+  aspect-ratio: 16 / 10;
   background-color: ${theme.colors.background.layer1};
 `;
 
 const Placeholder = styled.div`
   width: 100%;
-  aspect-ratio: 320 / 200;
+  aspect-ratio: 16 / 10;
   background-color: ${theme.colors.background.layer1};
-  border-radius: 12px;
 `;
 
 const ContentWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-`;
+  gap: 6px;
+  padding: 12px 14px;
 
-const Header = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: flex-start;
+  ${theme.media.tablet} {
+    gap: 8px;
+    padding: 14px 16px;
+  }
+
+  ${theme.media.desktop} {
+    gap: 8px;
+    padding: 16px 18px;
+  }
 `;
 
 const Title = styled.div`
   margin: 0;
-  font-size: ${theme.textSizes.body.xs};
-  font-weight: bold;
+  font-size: ${theme.textSizes.body.sm};
+  font-weight: 600;
+  color: ${theme.colors.text.body};
   line-height: 1.4;
   word-break: keep-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+
+  ${theme.media.tablet} {
+    font-size: ${theme.textSizes.body.md};
+  }
+
+  ${theme.media.desktop} {
+    font-size: ${theme.textSizes.body.md};
+  }
 `;
 
-const DateText = styled.div`
+const CategoryText = styled.span`
+  font-size: ${theme.textSizes.body.xs};
+  color: ${theme.colors.cream[600]};
+  font-weight: 500;
+`;
+
+const DateText = styled.span`
   font-size: ${theme.textSizes.body.xs};
   color: ${theme.colors.text.disabled};
   font-weight: 300;
-`;
-
-const Footer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
 `;
 
 interface PortfolioItemProps {
@@ -85,7 +99,7 @@ interface PortfolioItemProps {
 }
 
 function PortfolioItem({ post, onClick }: PortfolioItemProps) {
-  const { title, thumbnail, startDate, endDate, tags, category } = post;
+  const { title, thumbnail, startDate, endDate, category } = post;
   const dateRange = `${startDate} - ${endDate || 'Ing'}`;
 
   return (
@@ -96,7 +110,7 @@ function PortfolioItem({ post, onClick }: PortfolioItemProps) {
             src={thumbnail}
             alt={`${title} thumbnail`}
             fill
-            sizes="(max-width: 768px) 100vw, 320px"
+            sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"
             quality={IMAGE_QUALITY}
             style={{ objectFit: 'cover' }}
           />
@@ -106,15 +120,9 @@ function PortfolioItem({ post, onClick }: PortfolioItemProps) {
       )}
 
       <ContentWrapper>
-        <Header>
-          <Title>{title}</Title>
-          <DateText>{dateRange}</DateText>
-        </Header>
-
-        <Footer>
-          <TagList tags={tags} />
-          <CategoryBadge>{category}</CategoryBadge>
-        </Footer>
+        <Title>{title}</Title>
+        <CategoryText>{category}</CategoryText>
+        <DateText>{dateRange}</DateText>
       </ContentWrapper>
     </CardContainer>
   );
