@@ -25,7 +25,7 @@ const fetchBlogPosts = unstable_cache(
     do {
       const response = await notion.dataSources.query({
         data_source_id: dataSourceId,
-        sorts: [{ timestamp: 'created_time', direction: 'descending' }],
+        sorts: [{ property: 'date', direction: 'descending' }],
         ...(cursor ? { start_cursor: cursor } : {}),
       });
 
