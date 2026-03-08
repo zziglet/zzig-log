@@ -12,13 +12,23 @@ const ItemContainer = styled.article`
   width: 100%;
   background-color: ${theme.colors.background.base};
   border-radius: 24px;
-  padding: 24px 0;
+  padding: 20px 0;
   box-sizing: border-box;
   display: flex;
   align-items: flex-start;
-  gap: 36px;
+  gap: 16px;
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
+
+  ${theme.media.tablet} {
+    padding: 24px 0;
+    gap: 32px;
+  }
+
+  ${theme.media.desktop} {
+    padding: 24px 0;
+    gap: 36px;
+  }
 
   &:hover {
     transform: translateY(-4px);
@@ -27,20 +37,44 @@ const ItemContainer = styled.article`
 
 const ThumbnailWrapper = styled.div`
   position: relative;
-  width: 184px;
-  height: 184px;
-  border-radius: 12px;
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
   overflow: hidden;
   background-color: ${theme.colors.background.layer1};
   flex-shrink: 0;
+
+  ${theme.media.tablet} {
+    width: 160px;
+    height: 160px;
+    border-radius: 12px;
+  }
+
+  ${theme.media.desktop} {
+    width: 184px;
+    height: 184px;
+    border-radius: 12px;
+  }
 `;
 
 const Placeholder = styled.div`
-  width: 184px;
-  height: 184px;
-  border-radius: 12px;
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
   background-color: ${theme.colors.background.layer2};
   flex-shrink: 0;
+
+  ${theme.media.tablet} {
+    width: 160px;
+    height: 160px;
+    border-radius: 12px;
+  }
+
+  ${theme.media.desktop} {
+    width: 184px;
+    height: 184px;
+    border-radius: 12px;
+  }
 `;
 
 const ContentWrapper = styled.div`
@@ -48,8 +82,18 @@ const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 12px;
-  min-height: 184px;
+  gap: 8px;
+  min-height: 100px;
+
+  ${theme.media.tablet} {
+    gap: 12px;
+    min-height: 160px;
+  }
+
+  ${theme.media.desktop} {
+    gap: 12px;
+    min-height: 184px;
+  }
 `;
 
 const MetaHeader = styled.div`
@@ -102,7 +146,14 @@ function BlogItem({ post, onClick }: BlogItemProps) {
     <ItemContainer onClick={onClick}>
       {thumbnail ? (
         <ThumbnailWrapper>
-          <Image src={thumbnail} alt={`${title} thumbnail`} fill sizes="184px" quality={IMAGE_QUALITY} style={{ objectFit: 'cover' }} />
+          <Image
+            src={thumbnail}
+            alt={`${title} thumbnail`}
+            fill
+            sizes="(max-width: 767px) 100px, (max-width: 1023px) 160px, 184px"
+            quality={IMAGE_QUALITY}
+            style={{ objectFit: 'cover' }}
+          />
         </ThumbnailWrapper>
       ) : (
         <Placeholder />

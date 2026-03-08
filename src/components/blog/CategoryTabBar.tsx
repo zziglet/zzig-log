@@ -9,11 +9,25 @@ const TabContainer = styled.div`
   height: 64px;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   padding: 8px 0 16px;
   border-bottom: 0.5px solid ${theme.colors.border};
   background-color: ${theme.colors.background.base};
   box-sizing: border-box;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  ${theme.media.tablet} {
+    gap: 16px;
+  }
+
+  ${theme.media.desktop} {
+    gap: 16px;
+  }
 `;
 
 const TabItem = styled.button<{ isActive: boolean }>`
@@ -21,6 +35,8 @@ const TabItem = styled.button<{ isActive: boolean }>`
   border: none;
   padding: 4px;
   cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
   font-family: inherit;
   font-size: ${theme.textSizes.body.md};
   line-height: 32px;
