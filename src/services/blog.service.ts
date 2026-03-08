@@ -7,38 +7,46 @@ import { REVALIDATE_DETAIL, REVALIDATE_LIST } from '@/constants/cache';
 
 const n2m = new NotionToMarkdown({ notionClient: notion });
 
-export const getBlogPosts = unstable_cache(
-  async (): Promise<BlogPost[] | null> => {
-    try {
-      const dbResponse = await notion.databases.retrieve({
-        database_id: BLOG_DB_ID,
-      });
+const fetchBlogPosts = unstable_cache(
+  async (): Promise<BlogPost[]> => {
+    const dbResponse = await notion.databases.retrieve({
+      database_id: BLOG_DB_ID,
+    });
 
-      const dataSourceId = getDataSourceId(dbResponse);
+    const dataSourceId = getDataSourceId(dbResponse);
 
-      if (!dataSourceId) {
-        return null;
-      }
+    if (!dataSourceId) {
+      return [];
+    }
 
+    const results: PageObjectResponse[] = [];
+    let cursor: string | undefined;
+
+    do {
       const response = await notion.dataSources.query({
         data_source_id: dataSourceId,
-        sorts: [
-          {
-            timestamp: 'created_time',
-            direction: 'descending',
-          },
-        ],
+        sorts: [{ timestamp: 'created_time', direction: 'descending' }],
+        ...(cursor ? { start_cursor: cursor } : {}),
       });
 
-      return response.results.filter(isFullPage).map((post: PageObjectResponse) => parseBlogPost(post));
-    } catch (error) {
-      console.error('[BlogService] Failed to fetch posts:', error);
-      return null;
-    }
+      results.push(...response.results.filter(isFullPage));
+      cursor = response.has_more && response.next_cursor ? response.next_cursor : undefined;
+    } while (cursor);
+
+    return results.map((post) => parseBlogPost(post));
   },
   ['blog-list'],
   { revalidate: REVALIDATE_LIST },
 );
+
+export async function getBlogPosts(): Promise<BlogPost[] | null> {
+  try {
+    return await fetchBlogPosts();
+  } catch (error) {
+    console.error('[BlogService] Failed to fetch posts:', error);
+    return null;
+  }
+}
 
 export const getBlogPost = unstable_cache(
   async (id: string): Promise<BlogPostDetail | null> => {

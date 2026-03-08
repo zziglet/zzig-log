@@ -7,38 +7,46 @@ import { REVALIDATE_DETAIL, REVALIDATE_LIST } from '@/constants/cache';
 
 const n2m = new NotionToMarkdown({ notionClient: notion });
 
-export const getPortfolioPosts = unstable_cache(
-  async (): Promise<PortfolioPost[] | null> => {
-    try {
-      const dbResponse = await notion.databases.retrieve({
-        database_id: PORTFOLIO_DB_ID,
-      });
+const fetchPortfolioPosts = unstable_cache(
+  async (): Promise<PortfolioPost[]> => {
+    const dbResponse = await notion.databases.retrieve({
+      database_id: PORTFOLIO_DB_ID,
+    });
 
-      const dataSourceId = getDataSourceId(dbResponse);
+    const dataSourceId = getDataSourceId(dbResponse);
 
-      if (!dataSourceId) {
-        return null;
-      }
+    if (!dataSourceId) {
+      return [];
+    }
 
+    const results: PageObjectResponse[] = [];
+    let cursor: string | undefined;
+
+    do {
       const response = await notion.dataSources.query({
         data_source_id: dataSourceId,
-        sorts: [
-          {
-            property: 'date',
-            direction: 'descending',
-          },
-        ],
+        sorts: [{ property: 'date', direction: 'descending' }],
+        ...(cursor ? { start_cursor: cursor } : {}),
       });
 
-      return response.results.filter(isFullPage).map((post: PageObjectResponse) => parsePortfolioPage(post));
-    } catch (error) {
-      console.error('[PortfolioService] Failed to fetch posts:', error);
-      return null;
-    }
+      results.push(...response.results.filter(isFullPage));
+      cursor = response.has_more && response.next_cursor ? response.next_cursor : undefined;
+    } while (cursor);
+
+    return results.map((post) => parsePortfolioPage(post));
   },
   ['portfolio-list'],
   { revalidate: REVALIDATE_LIST },
 );
+
+export async function getPortfolioPosts(): Promise<PortfolioPost[] | null> {
+  try {
+    return await fetchPortfolioPosts();
+  } catch (error) {
+    console.error('[PortfolioService] Failed to fetch posts:', error);
+    return null;
+  }
+}
 
 export const getPortfolioPost = unstable_cache(
   async (id: string): Promise<PortfolioDetail | null> => {
