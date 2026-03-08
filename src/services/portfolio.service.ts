@@ -9,27 +9,32 @@ const n2m = new NotionToMarkdown({ notionClient: notion });
 
 export const getPortfolioPosts = unstable_cache(
   async (): Promise<PortfolioPost[] | null> => {
-    const dbResponse = await notion.databases.retrieve({
-      database_id: PORTFOLIO_DB_ID,
-    });
+    try {
+      const dbResponse = await notion.databases.retrieve({
+        database_id: PORTFOLIO_DB_ID,
+      });
 
-    const dataSourceId = getDataSourceId(dbResponse);
+      const dataSourceId = getDataSourceId(dbResponse);
 
-    if (!dataSourceId) {
+      if (!dataSourceId) {
+        return null;
+      }
+
+      const response = await notion.dataSources.query({
+        data_source_id: dataSourceId,
+        sorts: [
+          {
+            property: 'date',
+            direction: 'descending',
+          },
+        ],
+      });
+
+      return response.results.filter(isFullPage).map((post: PageObjectResponse) => parsePortfolioPage(post));
+    } catch (error) {
+      console.error('[PortfolioService] Failed to fetch posts:', error);
       return null;
     }
-
-    const response = await notion.dataSources.query({
-      data_source_id: dataSourceId,
-      sorts: [
-        {
-          property: 'date',
-          direction: 'descending',
-        },
-      ],
-    });
-
-    return response.results.filter(isFullPage).map((post: PageObjectResponse) => parsePortfolioPage(post));
   },
   ['portfolio-list'],
   { revalidate: REVALIDATE_LIST },

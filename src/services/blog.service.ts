@@ -9,27 +9,32 @@ const n2m = new NotionToMarkdown({ notionClient: notion });
 
 export const getBlogPosts = unstable_cache(
   async (): Promise<BlogPost[] | null> => {
-    const dbResponse = await notion.databases.retrieve({
-      database_id: BLOG_DB_ID,
-    });
+    try {
+      const dbResponse = await notion.databases.retrieve({
+        database_id: BLOG_DB_ID,
+      });
 
-    const dataSourceId = getDataSourceId(dbResponse);
+      const dataSourceId = getDataSourceId(dbResponse);
 
-    if (!dataSourceId) {
+      if (!dataSourceId) {
+        return null;
+      }
+
+      const response = await notion.dataSources.query({
+        data_source_id: dataSourceId,
+        sorts: [
+          {
+            timestamp: 'created_time',
+            direction: 'descending',
+          },
+        ],
+      });
+
+      return response.results.filter(isFullPage).map((post: PageObjectResponse) => parseBlogPost(post));
+    } catch (error) {
+      console.error('[BlogService] Failed to fetch posts:', error);
       return null;
     }
-
-    const response = await notion.dataSources.query({
-      data_source_id: dataSourceId,
-      sorts: [
-        {
-          timestamp: 'created_time',
-          direction: 'descending',
-        },
-      ],
-    });
-
-    return response.results.filter(isFullPage).map((post: PageObjectResponse) => parseBlogPost(post));
   },
   ['blog-list'],
   { revalidate: REVALIDATE_LIST },
