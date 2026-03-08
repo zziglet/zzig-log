@@ -71,7 +71,6 @@ const Title = styled.div`
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
-  white-space: unset;
 
   ${theme.media.tablet} {
     font-size: ${theme.textSizes.body.md};
