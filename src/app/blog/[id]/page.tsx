@@ -3,6 +3,9 @@ import { Metadata } from 'next';
 import BlogDetailContent from '@/components/blog/BlogDetailContent';
 import { PageContainer } from '@/styles/shared.styles';
 import { getBlogPost } from '@/services/blog.service';
+import { REVALIDATE_DETAIL } from '@/constants/cache';
+
+export const revalidate = REVALIDATE_DETAIL;
 
 interface Props {
   params: Promise<{ id: string }>;

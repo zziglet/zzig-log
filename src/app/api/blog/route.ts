@@ -1,6 +1,9 @@
 ﻿import { NextResponse } from 'next/server';
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import { BLOG_DB_ID, isFullPage, notion, parseBlogPost } from '@/utils/notion';
+import { REVALIDATE_LIST } from '@/constants/cache';
+
+export const revalidate = REVALIDATE_LIST;
 
 export async function GET() {
   if (!BLOG_DB_ID) {
