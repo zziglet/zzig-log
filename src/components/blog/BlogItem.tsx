@@ -172,7 +172,8 @@ function BlogItem({ post }: BlogItemProps) {
           <ThumbnailWrapper>
             <Image
               src={thumbnail}
-              alt={`${title} thumbnail`}
+              alt=""
+              aria-hidden="true"
               fill
               sizes="(max-width: 767px) 80px, (max-width: 1023px) 140px, 164px"
               quality={IMAGE_QUALITY}
