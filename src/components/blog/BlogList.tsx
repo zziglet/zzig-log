@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import styled from '@emotion/styled';
 import { BlogPost } from '@/types/blog';
@@ -10,7 +10,6 @@ const ListContainer = styled.div`
   flex-direction: column;
   width: 100%;
   padding: 8px 0 52px 0;
-  gap: 24px;
 `;
 
 const EmptyState = styled.div`
@@ -23,10 +22,9 @@ const EmptyState = styled.div`
 
 interface BlogListProps {
   posts: BlogPost[];
-  onClick: (post: BlogPost) => void;
 }
 
-function BlogList({ posts, onClick }: BlogListProps) {
+function BlogList({ posts }: BlogListProps) {
   if (!posts || posts.length === 0) {
     return <EmptyState>게시물이 존재하지 않습니다.</EmptyState>;
   }
@@ -34,7 +32,7 @@ function BlogList({ posts, onClick }: BlogListProps) {
   return (
     <ListContainer>
       {posts.map((post) => (
-        <BlogItem key={post.id} post={post} onClick={() => onClick(post)} />
+        <BlogItem key={post.id} post={post} />
       ))}
     </ListContainer>
   );

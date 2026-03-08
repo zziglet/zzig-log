@@ -1,10 +1,17 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import styled from '@emotion/styled';
 import { theme } from '@/styles/theme';
 import { BlogPost } from '@/types/blog';
 import { IMAGE_QUALITY } from '@/constants';
+
+const ItemLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+  display: block;
+`;
 
 const ItemContainer = styled.article`
   width: 100%;
@@ -153,39 +160,40 @@ const Dot = styled.span`
 
 interface BlogItemProps {
   post: BlogPost;
-  onClick?: () => void;
 }
 
-function BlogItem({ post, onClick }: BlogItemProps) {
-  const { title, subtitle, thumbnail, date, category } = post;
+function BlogItem({ post }: BlogItemProps) {
+  const { id, title, subtitle, thumbnail, date, category } = post;
 
   return (
-    <ItemContainer onClick={onClick}>
-      {thumbnail ? (
-        <ThumbnailWrapper>
-          <Image
-            src={thumbnail}
-            alt={`${title} thumbnail`}
-            fill
-            sizes="(max-width: 767px) 80px, (max-width: 1023px) 140px, 164px"
-            quality={IMAGE_QUALITY}
-            style={{ objectFit: 'cover' }}
-          />
-        </ThumbnailWrapper>
-      ) : (
-        <Placeholder />
-      )}
+    <ItemLink href={`/blog/${id}`}>
+      <ItemContainer>
+        {thumbnail ? (
+          <ThumbnailWrapper>
+            <Image
+              src={thumbnail}
+              alt={`${title} thumbnail`}
+              fill
+              sizes="(max-width: 767px) 80px, (max-width: 1023px) 140px, 164px"
+              quality={IMAGE_QUALITY}
+              style={{ objectFit: 'cover' }}
+            />
+          </ThumbnailWrapper>
+        ) : (
+          <Placeholder />
+        )}
 
-      <ContentWrapper>
-        <Title>{title}</Title>
-        {subtitle && <SubTitle>{subtitle}</SubTitle>}
-        <MetaRow>
-          <CategoryText>{category}</CategoryText>
-          <Dot>&middot;</Dot>
-          <DateText>{date}</DateText>
-        </MetaRow>
-      </ContentWrapper>
-    </ItemContainer>
+        <ContentWrapper>
+          <Title>{title}</Title>
+          {subtitle && <SubTitle>{subtitle}</SubTitle>}
+          <MetaRow>
+            <CategoryText>{category}</CategoryText>
+            <Dot>&middot;</Dot>
+            <DateText>{date}</DateText>
+          </MetaRow>
+        </ContentWrapper>
+      </ItemContainer>
+    </ItemLink>
   );
 }
 
