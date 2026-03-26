@@ -13,6 +13,7 @@ import { RiShareLine, RiArrowLeftLine } from '@remixicon/react';
 import { IMAGE_QUALITY } from '@/constants';
 import { useToast } from '@/components/common/Toast';
 import { copyToClipboard } from '@/utils/clipboard';
+import GiscusComments from '@/components/comments/GiscusComments';
 
 const Container = styled.div`
   display: flex;
@@ -144,6 +145,7 @@ function BlogDetailContent({ post }: BlogDetailContentProps) {
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
       </MarkdownBody>
 
+      <GiscusComments pagePath={`/blog/${id}`} pageTitle={title} />
       {ToastUI}
     </Container>
   );
