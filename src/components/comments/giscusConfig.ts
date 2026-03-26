@@ -22,7 +22,3 @@ export function getGiscusConfig(): GiscusConfig | null {
     categoryId,
   };
 }
-
-export function getGiscusTheme(theme: 'light' | 'dark'): 'light' | 'dark' {
-  return theme;
-}

@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Script from 'next/script';
 import styled from '@emotion/styled';
 import { theme } from '@/styles/theme';
-import { getGiscusConfig, getGiscusTheme } from './giscusConfig';
+import { getGiscusConfig } from './giscusConfig';
 
 const Section = styled.section`
   padding-top: 32px;
@@ -34,7 +34,10 @@ export default function GiscusComments({ pageTitle, pagePath }: GiscusCommentsPr
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const applyTheme = (event: MediaQueryListEvent | MediaQueryList) => {
       const nextTheme = event.matches ? 'dark' : 'light';
-      setGiscusTheme(getGiscusTheme(nextTheme));
+      setGiscusTheme(nextTheme);
+
+      const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame');
+      iframe?.contentWindow?.postMessage({ giscus: { setConfig: { theme: nextTheme } } }, 'https://giscus.app');
     };
 
     applyTheme(mediaQuery);
