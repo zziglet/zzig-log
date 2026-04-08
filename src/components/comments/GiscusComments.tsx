@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import Script from 'next/script';
+import { useEffect, useRef, useCallback } from 'react';
 import styled from '@emotion/styled';
 import { theme } from '@/styles/theme';
 import { getGiscusConfig } from './giscusConfig';
@@ -27,28 +26,54 @@ interface GiscusCommentsProps {
 
 export default function GiscusComments({ pageTitle, pagePath }: GiscusCommentsProps) {
   const giscusConfig = getGiscusConfig();
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const [giscusTheme, setGiscusTheme] = useState<'light' | 'dark'>('light');
+  const getTheme = useCallback(() => {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }, []);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const applyTheme = (event: MediaQueryListEvent | MediaQueryList) => {
-      const nextTheme = event.matches ? 'dark' : 'light';
-      setGiscusTheme(nextTheme);
+    if (!giscusConfig || !containerRef.current) return;
 
-      const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame');
+    const container = containerRef.current;
+    container.innerHTML = '';
+
+    const mappingTerm = pageTitle?.trim() ? pageTitle.trim() : pagePath;
+
+    const script = document.createElement('script');
+    script.src = 'https://giscus.app/client.js';
+    script.setAttribute('data-repo', giscusConfig.repo);
+    script.setAttribute('data-repo-id', giscusConfig.repoId);
+    script.setAttribute('data-category', giscusConfig.category);
+    script.setAttribute('data-category-id', giscusConfig.categoryId);
+    script.setAttribute('data-mapping', 'pathname');
+    script.setAttribute('data-term', mappingTerm);
+    script.setAttribute('data-reactions-enabled', '1');
+    script.setAttribute('data-emit-metadata', '0');
+    script.setAttribute('data-input-position', 'top');
+    script.setAttribute('data-theme', getTheme());
+    script.setAttribute('data-lang', 'ko');
+    script.setAttribute('data-loading', 'lazy');
+    script.setAttribute('data-strict', '0');
+    script.crossOrigin = 'anonymous';
+    script.async = true;
+
+    container.appendChild(script);
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleThemeChange = (event: MediaQueryListEvent) => {
+      const nextTheme = event.matches ? 'dark' : 'light';
+      const iframe = container.querySelector<HTMLIFrameElement>('iframe.giscus-frame');
       iframe?.contentWindow?.postMessage({ giscus: { setConfig: { theme: nextTheme } } }, 'https://giscus.app');
     };
 
-    applyTheme(mediaQuery);
-    mediaQuery.addEventListener('change', applyTheme);
+    mediaQuery.addEventListener('change', handleThemeChange);
 
     return () => {
-      mediaQuery.removeEventListener('change', applyTheme);
+      mediaQuery.removeEventListener('change', handleThemeChange);
+      container.innerHTML = '';
     };
-  }, []);
-
-  const scriptKey = useMemo(() => `giscus-${pagePath.replace(/\//g, '-')}`, [pagePath]);
+  }, [giscusConfig, pagePath, pageTitle, getTheme]);
 
   if (!giscusConfig) {
     if (process.env.NODE_ENV === 'development') {
@@ -57,30 +82,9 @@ export default function GiscusComments({ pageTitle, pagePath }: GiscusCommentsPr
     return null;
   }
 
-  const mappingTerm = pageTitle?.trim() ? pageTitle.trim() : pagePath;
-
   return (
     <Section>
-      <GiscusContainer className="giscus" />
-      <Script
-        key={scriptKey}
-        src="https://giscus.app/client.js"
-        data-repo={giscusConfig.repo}
-        data-repo-id={giscusConfig.repoId}
-        data-category={giscusConfig.category}
-        data-category-id={giscusConfig.categoryId}
-        data-mapping="pathname"
-        data-term={mappingTerm}
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="top"
-        data-theme={giscusTheme}
-        data-lang="ko"
-        data-loading="lazy"
-        data-strict="0"
-        crossOrigin="anonymous"
-        strategy="afterInteractive"
-      />
+      <GiscusContainer ref={containerRef} className="giscus" />
       <noscript>
         <Notice>댓글은 JavaScript 사용이 필요한 기능입니다.</Notice>
       </noscript>
