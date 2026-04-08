@@ -5,6 +5,7 @@ import styled from '@emotion/styled';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 import { BlogPostDetail } from '@/types/blog';
 import { theme } from '@/styles/theme';
 import TagList from '@/components/common/TagList';
@@ -13,6 +14,7 @@ import { RiShareLine, RiArrowLeftLine } from '@remixicon/react';
 import { IMAGE_QUALITY } from '@/constants';
 import { useToast } from '@/components/common/Toast';
 import { copyToClipboard } from '@/utils/clipboard';
+import GiscusComments from '@/components/comments/GiscusComments';
 
 const Container = styled.div`
   display: flex;
@@ -141,9 +143,12 @@ function BlogDetailContent({ post }: BlogDetailContentProps) {
       </TitleSection>
 
       <MarkdownBody>
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+        <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+          {content}
+        </ReactMarkdown>
       </MarkdownBody>
 
+      <GiscusComments pagePath={`/blog/${id}`} pageTitle={title} />
       {ToastUI}
     </Container>
   );

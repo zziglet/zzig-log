@@ -4,6 +4,7 @@ import Image from 'next/image';
 import styled from '@emotion/styled';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 import { PortfolioDetail } from '@/types/portfolio';
 import { theme } from '@/styles/theme';
 import TagList from '@/components/common/TagList';
@@ -13,6 +14,7 @@ import { RiGithubFill, RiGlobalLine, RiShareLine } from '@remixicon/react';
 import { IMAGE_QUALITY } from '@/constants';
 import { useToast } from '@/components/common/Toast';
 import { copyToClipboard } from '@/utils/clipboard';
+import GiscusComments from '@/components/comments/GiscusComments';
 
 const Container = styled.div`
   display: flex;
@@ -133,9 +135,12 @@ function PortfolioDetailContent({ post }: PortfolioDetailContentProps) {
       </MetaSection>
 
       <MarkdownBody>
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+        <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+          {content}
+        </ReactMarkdown>
       </MarkdownBody>
 
+      <GiscusComments pagePath={`/portfolio/${id}`} pageTitle={title} />
       {ToastUI}
     </Container>
   );

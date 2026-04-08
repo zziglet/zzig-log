@@ -4,8 +4,10 @@ import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import { BLOG_DB_ID, getDataSourceId, isFullPage, notion, parseBlogPost } from '@/utils/notion';
 import { BlogPost, BlogPostDetail } from '@/types/blog';
 import { REVALIDATE_DETAIL, REVALIDATE_LIST } from '@/constants/cache';
+import { registerImageTransformer } from '@/utils/notion-transformers';
 
 const n2m = new NotionToMarkdown({ notionClient: notion });
+registerImageTransformer(n2m);
 
 const fetchBlogPosts = unstable_cache(
   async (): Promise<BlogPost[]> => {
