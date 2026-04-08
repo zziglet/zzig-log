@@ -5,6 +5,7 @@ import styled from '@emotion/styled';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 import { BlogPostDetail } from '@/types/blog';
 import { theme } from '@/styles/theme';
 import TagList from '@/components/common/TagList';
@@ -142,7 +143,9 @@ function BlogDetailContent({ post }: BlogDetailContentProps) {
       </TitleSection>
 
       <MarkdownBody>
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+        <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+          {content}
+        </ReactMarkdown>
       </MarkdownBody>
 
       <GiscusComments pagePath={`/blog/${id}`} pageTitle={title} />

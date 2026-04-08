@@ -4,6 +4,7 @@ import Image from 'next/image';
 import styled from '@emotion/styled';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 import { PortfolioDetail } from '@/types/portfolio';
 import { theme } from '@/styles/theme';
 import TagList from '@/components/common/TagList';
@@ -134,7 +135,9 @@ function PortfolioDetailContent({ post }: PortfolioDetailContentProps) {
       </MetaSection>
 
       <MarkdownBody>
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+        <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+          {content}
+        </ReactMarkdown>
       </MarkdownBody>
 
       <GiscusComments pagePath={`/portfolio/${id}`} pageTitle={title} />
