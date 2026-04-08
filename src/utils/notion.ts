@@ -19,6 +19,7 @@ if (!process.env.NOTION_DB_PORTFOLIO_ID) {
 export const notion = new Client({
   auth: process.env.NOTION_API_KEY,
   notionVersion: '2025-09-03',
+  timeoutMs: 120_000,
 });
 
 export const BLOG_DB_ID = process.env.NOTION_DB_BLOG_ID || '';
