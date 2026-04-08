@@ -4,8 +4,10 @@ import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import { PORTFOLIO_DB_ID, getDataSourceId, isFullPage, notion, parsePortfolioPage } from '@/utils/notion';
 import { PortfolioDetail, PortfolioPost } from '@/types/portfolio';
 import { REVALIDATE_DETAIL, REVALIDATE_LIST } from '@/constants/cache';
+import { registerImageTransformer } from '@/utils/notion-transformers';
 
 const n2m = new NotionToMarkdown({ notionClient: notion });
+registerImageTransformer(n2m);
 
 const fetchPortfolioPosts = unstable_cache(
   async (): Promise<PortfolioPost[]> => {
