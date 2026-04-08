@@ -4,7 +4,7 @@ import PortfolioDetailContent from '@/components/portfolio/PortfolioDetailConten
 import { PageContainer } from '@/styles/shared.styles';
 import { getPortfolioPost } from '@/services/portfolio.service';
 
-export const revalidate = 3600;
+export const revalidate = 600;
 
 interface PortfolioDetailPageProps {
   params: Promise<{ id: string }>;
