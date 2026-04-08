@@ -3,9 +3,8 @@ import { Metadata } from 'next';
 import PortfolioDetailContent from '@/components/portfolio/PortfolioDetailContent';
 import { PageContainer } from '@/styles/shared.styles';
 import { getPortfolioPost } from '@/services/portfolio.service';
-import { REVALIDATE_DETAIL } from '@/constants/cache';
 
-export const revalidate = REVALIDATE_DETAIL;
+export const revalidate = 600;
 
 interface PortfolioDetailPageProps {
   params: Promise<{ id: string }>;
