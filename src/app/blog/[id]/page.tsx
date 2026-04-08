@@ -4,7 +4,7 @@ import BlogDetailContent from '@/components/blog/BlogDetailContent';
 import { PageContainer } from '@/styles/shared.styles';
 import { getBlogPost } from '@/services/blog.service';
 
-export const revalidate = 3600;
+export const revalidate = 600;
 
 interface Props {
   params: Promise<{ id: string }>;
