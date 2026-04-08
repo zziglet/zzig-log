@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef } from 'react';
 import styled from '@emotion/styled';
 import { theme } from '@/styles/theme';
 import { getGiscusConfig } from './giscusConfig';
@@ -28,10 +28,6 @@ export default function GiscusComments({ pageTitle, pagePath }: GiscusCommentsPr
   const giscusConfig = getGiscusConfig();
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const getTheme = useCallback(() => {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  }, []);
-
   useEffect(() => {
     if (!giscusConfig || !containerRef.current) return;
 
@@ -51,7 +47,7 @@ export default function GiscusComments({ pageTitle, pagePath }: GiscusCommentsPr
     script.setAttribute('data-reactions-enabled', '1');
     script.setAttribute('data-emit-metadata', '0');
     script.setAttribute('data-input-position', 'top');
-    script.setAttribute('data-theme', getTheme());
+    script.setAttribute('data-theme', window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     script.setAttribute('data-lang', 'ko');
     script.setAttribute('data-loading', 'lazy');
     script.setAttribute('data-strict', '0');
@@ -73,7 +69,7 @@ export default function GiscusComments({ pageTitle, pagePath }: GiscusCommentsPr
       mediaQuery.removeEventListener('change', handleThemeChange);
       container.innerHTML = '';
     };
-  }, [giscusConfig, pagePath, pageTitle, getTheme]);
+  }, [pagePath, pageTitle]);
 
   if (!giscusConfig) {
     if (process.env.NODE_ENV === 'development') {
