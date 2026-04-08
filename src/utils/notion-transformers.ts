@@ -13,6 +13,10 @@ type ImageBlock = ListBlockChildrenResponseResult & {
 
 const WIDTH_PATTERN = /width:(\d+%)/;
 
+function escapeHtml(str: string): string {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
 function isImageBlock(block: ListBlockChildrenResponseResult): block is ImageBlock {
   return 'type' in block && block.type === 'image';
 }
@@ -40,7 +44,7 @@ export function registerImageTransformer(n2m: NotionToMarkdown) {
     if (!url) return false;
 
     const { text, width } = parseCaption(block);
-    const alt = text || 'image';
+    const alt = escapeHtml(text || 'image');
 
     if (width) {
       return `<img src="${url}" alt="${alt}" style="width:${width};border-radius:12px" />`;
