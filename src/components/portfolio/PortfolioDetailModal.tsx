@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useId, useRef } from 'react';
 import styled from '@emotion/styled';
 import Link from 'next/link';
 import { theme } from '@/styles/theme';
@@ -126,6 +126,18 @@ const ScrollArea = styled.div`
   }
 `;
 
+const VisuallyHiddenTitle = styled.h2`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+`;
+
 interface PortfolioModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -133,27 +145,80 @@ interface PortfolioModalProps {
 }
 
 function PortfolioDetailModal({ isOpen, onClose, post }: PortfolioModalProps) {
+  const modalRef = useRef<HTMLDivElement>(null);
+  const previousActiveElementRef = useRef<HTMLElement | null>(null);
+  const titleId = useId();
+
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
+    if (!isOpen || !post) return;
+
+    previousActiveElementRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    document.body.style.overflow = 'hidden';
+
+    const modalElement = modalRef.current;
+    const getFocusableElements = () =>
+      modalElement
+        ? Array.from(
+            modalElement.querySelectorAll<HTMLElement>(
+              'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
+            ),
+          )
+        : [];
+
+    const focusableElements = getFocusableElements();
+    (focusableElements[0] ?? modalElement)?.focus();
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        onClose();
+        return;
+      }
+
+      if (event.key !== 'Tab') return;
+
+      const elements = getFocusableElements();
+      if (elements.length === 0) {
+        event.preventDefault();
+        modalElement?.focus();
+        return;
+      }
+
+      const firstElement = elements[0];
+      const lastElement = elements[elements.length - 1];
+      const activeElement = document.activeElement;
+
+      if (event.shiftKey && (activeElement === firstElement || activeElement === modalElement)) {
+        event.preventDefault();
+        lastElement.focus();
+      }
+
+      if (!event.shiftKey && activeElement === lastElement) {
+        event.preventDefault();
+        firstElement.focus();
+      }
     };
-  }, [isOpen]);
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'unset';
+      previousActiveElementRef.current?.focus();
+    };
+  }, [isOpen, onClose, post]);
 
   if (!isOpen || !post) return null;
 
   return (
     <Backdrop onClick={onClose}>
-      <ModalContainer onClick={(e) => e.stopPropagation()}>
+      <ModalContainer ref={modalRef} role="dialog" aria-modal="true" aria-labelledby={titleId} tabIndex={-1} onClick={(e) => e.stopPropagation()}>
+        <VisuallyHiddenTitle id={titleId}>{post.title}</VisuallyHiddenTitle>
         <ModalHeader>
-          <ControlLink href={`/portfolio/${post.id}`} title="전체 페이지로 보기">
+          <ControlLink href={`/portfolio/${post.id}`} title="전체 페이지로 보기" aria-label="전체 페이지로 보기">
             <RiFullscreenLine size={24} />
           </ControlLink>
-          <ControlButton onClick={onClose} title="닫기">
+          <ControlButton type="button" onClick={onClose} title="닫기" aria-label="닫기">
             <RiCloseLine size={24} />
           </ControlButton>
         </ModalHeader>

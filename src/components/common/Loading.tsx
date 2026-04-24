@@ -28,12 +28,25 @@ const Dot = styled.div<{ delay: string }>`
   }
 `;
 
+const VisuallyHiddenText = styled.span`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+`;
+
 function Loading() {
   return (
-    <Container>
-      <Dot delay="0s" />
-      <Dot delay="0.2s" />
-      <Dot delay="0.4s" />
+    <Container role="status" aria-live="polite">
+      <VisuallyHiddenText>로딩 중</VisuallyHiddenText>
+      <Dot delay="0s" aria-hidden="true" />
+      <Dot delay="0.2s" aria-hidden="true" />
+      <Dot delay="0.4s" aria-hidden="true" />
     </Container>
   );
 }
