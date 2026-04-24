@@ -47,7 +47,7 @@ function IntroSection() {
         </Greeting>
         <SubTitle>Web Front-End Developer in Seoul, Korea</SubTitle>
       </DescriptionBox>
-      <Image src={INFO_IMAGES.homeIcon1} alt="Intro Main" width={4776} height={1744} unoptimized style={{ width: '100%', height: 'auto' }} priority />
+      <Image src={INFO_IMAGES.homeIcon1} alt="Intro Main" width={4776} height={1744} style={{ width: '100%', height: 'auto' }} priority />
     </SectionContainer>
   );
 }

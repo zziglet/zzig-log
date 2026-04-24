@@ -4,26 +4,31 @@ import { PortfolioPost } from '@/types/portfolio';
 import { BlogPost } from '@/types/blog';
 import { formatDate } from './format';
 
-if (!process.env.NOTION_API_KEY) {
-  throw new Error('NOTION_API_KEY environment variable is required');
+function getRequiredEnv(name: 'NOTION_API_KEY' | 'NOTION_DB_BLOG_ID' | 'NOTION_DB_PORTFOLIO_ID'): string {
+  const value = process.env[name];
+
+  if (!value) {
+    throw new Error(`${name} environment variable is required`);
+  }
+
+  return value;
 }
 
-if (!process.env.NOTION_DB_BLOG_ID) {
-  throw new Error('NOTION_DB_BLOG_ID environment variable is required');
+export function getNotionClient(): Client {
+  return new Client({
+    auth: getRequiredEnv('NOTION_API_KEY'),
+    notionVersion: '2025-09-03',
+    timeoutMs: 120_000,
+  });
 }
 
-if (!process.env.NOTION_DB_PORTFOLIO_ID) {
-  throw new Error('NOTION_DB_PORTFOLIO_ID environment variable is required');
+export function getBlogDbId(): string {
+  return getRequiredEnv('NOTION_DB_BLOG_ID');
 }
 
-export const notion = new Client({
-  auth: process.env.NOTION_API_KEY,
-  notionVersion: '2025-09-03',
-  timeoutMs: 120_000,
-});
-
-export const BLOG_DB_ID = process.env.NOTION_DB_BLOG_ID || '';
-export const PORTFOLIO_DB_ID = process.env.NOTION_DB_PORTFOLIO_ID || '';
+export function getPortfolioDbId(): string {
+  return getRequiredEnv('NOTION_DB_PORTFOLIO_ID');
+}
 
 export function getDataSourceId(dbResponse: unknown): string | undefined {
   const record = dbResponse as Record<string, unknown>;
