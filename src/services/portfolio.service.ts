@@ -1,18 +1,23 @@
 import { unstable_cache } from 'next/cache';
 import { NotionToMarkdown } from 'notion-to-md';
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
-import { PORTFOLIO_DB_ID, getDataSourceId, isFullPage, notion, parsePortfolioPage } from '@/utils/notion';
+import { getDataSourceId, getNotionClient, getPortfolioDbId, isFullPage, parsePortfolioPage } from '@/utils/notion';
 import { PortfolioDetail, PortfolioPost } from '@/types/portfolio';
 import { REVALIDATE_DETAIL, REVALIDATE_LIST } from '@/constants/cache';
 import { registerImageTransformer } from '@/utils/notion-transformers';
 
-const n2m = new NotionToMarkdown({ notionClient: notion });
-registerImageTransformer(n2m);
+function createMarkdownClient() {
+  const n2m = new NotionToMarkdown({ notionClient: getNotionClient() });
+  registerImageTransformer(n2m);
+  return n2m;
+}
 
 const fetchPortfolioPosts = unstable_cache(
   async (): Promise<PortfolioPost[]> => {
+    const notion = getNotionClient();
+    const portfolioDbId = getPortfolioDbId();
     const dbResponse = await notion.databases.retrieve({
-      database_id: PORTFOLIO_DB_ID,
+      database_id: portfolioDbId,
     });
 
     const dataSourceId = getDataSourceId(dbResponse);
@@ -53,6 +58,8 @@ export async function getPortfolioPosts(): Promise<PortfolioPost[] | null> {
 const fetchPortfolioPost = unstable_cache(
   async (id: string): Promise<PortfolioDetail | null> => {
     if (!id) throw new Error('Portfolio ID is required');
+    const notion = getNotionClient();
+    const n2m = createMarkdownClient();
 
     const [pageResponse, mdBlocks] = await Promise.all([notion.pages.retrieve({ page_id: id }), n2m.pageToMarkdown(id)]);
 

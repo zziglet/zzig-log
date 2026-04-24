@@ -1,13 +1,15 @@
 import { NextResponse } from 'next/server';
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
-import { BLOG_DB_ID, getDataSourceId, isFullPage, notion, parseBlogPost } from '@/utils/notion';
+import { getBlogDbId, getDataSourceId, getNotionClient, isFullPage, parseBlogPost } from '@/utils/notion';
 import { unstable_cache } from 'next/cache';
 import { REVALIDATE_LIST } from '@/constants/cache';
 
 const getCachedBlogList = unstable_cache(
   async () => {
+    const notion = getNotionClient();
+    const blogDbId = getBlogDbId();
     const dbResponse = await notion.databases.retrieve({
-      database_id: BLOG_DB_ID,
+      database_id: blogDbId,
     });
 
     const dataSourceId = getDataSourceId(dbResponse);
@@ -33,10 +35,6 @@ const getCachedBlogList = unstable_cache(
 );
 
 export async function GET() {
-  if (!BLOG_DB_ID) {
-    return NextResponse.json({ error: 'Missing NOTION_DATABASE_ID' }, { status: 500 });
-  }
-
   try {
     const posts = await getCachedBlogList();
 
