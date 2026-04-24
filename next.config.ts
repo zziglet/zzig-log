@@ -10,10 +10,11 @@ const contentSecurityPolicy = [
   "font-src 'self' data:",
   "connect-src 'self' https://api.github.com https://github.com https://giscus.app",
   'frame-src https://giscus.app',
-  "frame-ancestors 'self'",
+  "frame-ancestors 'none'",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",
+  ...(isDev ? [] : ['upgrade-insecure-requests']),
 ].join('; ');
 
 const nextConfig: NextConfig = {
@@ -47,7 +48,7 @@ const nextConfig: NextConfig = {
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           {
             key: 'Strict-Transport-Security',
-            value: 'max-age=31536000; includeSubDomains; preload',
+            value: 'max-age=63072000; includeSubDomains; preload',
           },
           {
             key: 'Content-Security-Policy',

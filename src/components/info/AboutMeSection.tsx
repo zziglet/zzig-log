@@ -107,7 +107,6 @@ function AboutMeSection() {
             alt="Profile"
             fill
             sizes="(max-width: 767px) 200px, (max-width: 1023px) 300px, 400px"
-            unoptimized
             style={{ objectFit: 'cover' }}
           />
         </ProfileImageWrapper>

@@ -1,13 +1,15 @@
 import { NextResponse } from 'next/server';
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
-import { notion, PORTFOLIO_DB_ID, getDataSourceId, isFullPage, parsePortfolioPage } from '@/utils/notion';
+import { getDataSourceId, getNotionClient, getPortfolioDbId, isFullPage, parsePortfolioPage } from '@/utils/notion';
 import { unstable_cache } from 'next/cache';
 import { REVALIDATE_LIST } from '@/constants/cache';
 
 const getCachedPortfolioList = unstable_cache(
   async () => {
+    const notion = getNotionClient();
+    const portfolioDbId = getPortfolioDbId();
     const dbResponse = await notion.databases.retrieve({
-      database_id: PORTFOLIO_DB_ID,
+      database_id: portfolioDbId,
     });
 
     const dataSourceId = getDataSourceId(dbResponse);
@@ -33,10 +35,6 @@ const getCachedPortfolioList = unstable_cache(
 );
 
 export async function GET() {
-  if (!PORTFOLIO_DB_ID) {
-    return NextResponse.json({ error: 'Missing NOTION_PORTFOLIO_DB_ID' }, { status: 500 });
-  }
-
   try {
     const portfolios = await getCachedPortfolioList();
 

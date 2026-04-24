@@ -1,18 +1,23 @@
 import { unstable_cache } from 'next/cache';
 import { NotionToMarkdown } from 'notion-to-md';
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
-import { BLOG_DB_ID, getDataSourceId, isFullPage, notion, parseBlogPost } from '@/utils/notion';
+import { getBlogDbId, getDataSourceId, getNotionClient, isFullPage, parseBlogPost } from '@/utils/notion';
 import { BlogPost, BlogPostDetail } from '@/types/blog';
 import { REVALIDATE_DETAIL, REVALIDATE_LIST } from '@/constants/cache';
 import { registerImageTransformer } from '@/utils/notion-transformers';
 
-const n2m = new NotionToMarkdown({ notionClient: notion });
-registerImageTransformer(n2m);
+function createMarkdownClient() {
+  const n2m = new NotionToMarkdown({ notionClient: getNotionClient() });
+  registerImageTransformer(n2m);
+  return n2m;
+}
 
 const fetchBlogPosts = unstable_cache(
   async (): Promise<BlogPost[]> => {
+    const notion = getNotionClient();
+    const blogDbId = getBlogDbId();
     const dbResponse = await notion.databases.retrieve({
-      database_id: BLOG_DB_ID,
+      database_id: blogDbId,
     });
 
     const dataSourceId = getDataSourceId(dbResponse);
@@ -53,6 +58,8 @@ export async function getBlogPosts(): Promise<BlogPost[] | null> {
 const fetchBlogPost = unstable_cache(
   async (id: string): Promise<BlogPostDetail | null> => {
     if (!id) throw new Error('Post ID is required');
+    const notion = getNotionClient();
+    const n2m = createMarkdownClient();
 
     const [pageResponse, mdBlocks] = await Promise.all([notion.pages.retrieve({ page_id: id }), n2m.pageToMarkdown(id)]);
 

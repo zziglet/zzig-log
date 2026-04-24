@@ -3,8 +3,10 @@ import { suit } from '@/styles/fonts';
 import '@/styles/globals.css';
 import { EmotionThemeProvider } from '@/components/providers/EmotionThemeProvider';
 import { AppLayout } from '@/components/common/layout/AppLayout';
+import { BASE_URL } from '@/constants';
 
 export const metadata: Metadata = {
+  metadataBase: new URL(BASE_URL),
   title: 'zzig.log',
   description: 'zziglet의 좌충우돌 개발 생존기',
 };
