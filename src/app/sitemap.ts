@@ -1,21 +1,22 @@
 ﻿import type { MetadataRoute } from 'next';
+import { BASE_URL } from '@/constants';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
-      url: 'https://zziglet.com/',
+      url: BASE_URL,
       lastModified: new Date(),
       changeFrequency: 'yearly',
       priority: 1,
     },
     {
-      url: 'https://zziglet.com/blog',
+      url: `${BASE_URL}/blog`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: 'https://zziglet.com/portfolio',
+      url: `${BASE_URL}/portfolio`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.5,
