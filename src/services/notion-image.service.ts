@@ -23,10 +23,6 @@ function getFileUrl(value: unknown): string | null {
     return value.file.url;
   }
 
-  if (value.type === 'external' && isRecord(value.external) && typeof value.external.url === 'string') {
-    return value.external.url;
-  }
-
   return null;
 }
 

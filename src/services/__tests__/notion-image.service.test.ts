@@ -91,6 +91,31 @@ describe('Notion image resolution', () => {
 
     await expect(resolveBlockImageUrl(notion, 'block-id', [ALLOWED_DATABASE_ID])).resolves.toBe('https://notion.example/nested-image-url');
   });
+
+  it('rejects external URLs from the server-side proxy flow', async () => {
+    const notion = createClient();
+    vi.mocked(notion.blocks.retrieve).mockResolvedValue({
+      type: 'image',
+      image: { type: 'external', external: { url: 'http://127.0.0.1/private' } },
+      parent: { type: 'page_id', page_id: 'page-id' },
+    });
+    vi.mocked(notion.pages.retrieve)
+      .mockResolvedValueOnce({
+        parent: { type: 'data_source_id', database_id: ALLOWED_DATABASE_ID },
+      })
+      .mockResolvedValueOnce({
+        parent: { type: 'data_source_id', database_id: ALLOWED_DATABASE_ID },
+        properties: {
+          thumbnail: {
+            type: 'files',
+            files: [{ type: 'external', external: { url: 'http://127.0.0.1/private' } }],
+          },
+        },
+      });
+
+    await expect(resolveBlockImageUrl(notion, 'block-id', [ALLOWED_DATABASE_ID])).resolves.toBeNull();
+    await expect(resolvePageThumbnailUrl(notion, 'page-id', [ALLOWED_DATABASE_ID])).resolves.toBeNull();
+  });
 });
 
 describe('serveNotionImage', () => {
