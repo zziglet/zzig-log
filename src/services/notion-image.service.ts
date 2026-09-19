@@ -1,3 +1,4 @@
+import { APIErrorCode, isNotionClientError } from '@notionhq/client';
 import { NOTION_IMAGE_CACHE_CONTROL } from '@/utils/notion-image';
 
 export interface NotionImageClient {
@@ -112,6 +113,10 @@ export async function serveNotionImage(resolveUrl: () => Promise<string | null>,
       },
     });
   } catch (error) {
+    if (isNotionClientError(error) && error.code === APIErrorCode.ObjectNotFound) {
+      return errorResponse('Notion image not found', 404);
+    }
+
     console.error('[NotionImageService] Failed to serve image:', error);
     return errorResponse('Failed to resolve Notion image', 502);
   }

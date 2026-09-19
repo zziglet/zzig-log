@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { APIErrorCode, APIResponseError } from '@notionhq/client';
 import { NotionImageClient, resolveBlockImageUrl, resolvePageThumbnailUrl, serveNotionImage } from '../notion-image.service';
 import { NOTION_IMAGE_CACHE_CONTROL } from '@/utils/notion-image';
 
@@ -135,6 +136,41 @@ describe('serveNotionImage', () => {
     vi.spyOn(console, 'error').mockImplementation(() => undefined);
 
     const response = await serveNotionImage(() => Promise.reject(new Error('Notion unavailable')), vi.fn());
+
+    expect(response.status).toBe(502);
+    expect(response.headers.get('cache-control')).toBe('no-store');
+  });
+
+  it('maps Notion object-not-found errors to an uncached 404', async () => {
+    const error = new APIResponseError({
+      code: APIErrorCode.ObjectNotFound,
+      status: 404,
+      message: 'Could not find block',
+      headers: new Headers(),
+      rawBodyText: '',
+      additional_data: undefined,
+      request_id: 'request-id',
+    });
+
+    const response = await serveNotionImage(() => Promise.reject(error), vi.fn());
+
+    expect(response.status).toBe(404);
+    expect(response.headers.get('cache-control')).toBe('no-store');
+  });
+
+  it('keeps other Notion API errors as an uncached 502', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const error = new APIResponseError({
+      code: APIErrorCode.Unauthorized,
+      status: 401,
+      message: 'Unauthorized',
+      headers: new Headers(),
+      rawBodyText: '',
+      additional_data: undefined,
+      request_id: 'request-id',
+    });
+
+    const response = await serveNotionImage(() => Promise.reject(error), vi.fn());
 
     expect(response.status).toBe(502);
     expect(response.headers.get('cache-control')).toBe('no-store');
