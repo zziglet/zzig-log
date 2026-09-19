@@ -1,4 +1,4 @@
-import { getNotionClient } from '@/utils/notion';
+import { getContentDatabaseIds, getNotionClient } from '@/utils/notion';
 import { isValidNotionId } from '@/utils/notion-image';
 import { resolvePageThumbnailUrl, serveNotionImage } from '@/services/notion-image.service';
 
@@ -12,5 +12,5 @@ export async function GET(_request: Request, { params }: NotionPageThumbnailRout
     return Response.json({ error: 'Invalid Notion page ID' }, { status: 404, headers: { 'Cache-Control': 'no-store' } });
   }
 
-  return serveNotionImage(() => resolvePageThumbnailUrl(getNotionClient(), id));
+  return serveNotionImage(() => resolvePageThumbnailUrl(getNotionClient(), id, getContentDatabaseIds()));
 }

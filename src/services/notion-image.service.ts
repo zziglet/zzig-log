@@ -29,17 +29,58 @@ function getFileUrl(value: unknown): string | null {
   return null;
 }
 
-export async function resolveBlockImageUrl(notion: NotionImageClient, blockId: string): Promise<string | null> {
+function normalizeNotionId(id: string): string {
+  return id.replaceAll('-', '').toLowerCase();
+}
+
+function belongsToAllowedDatabase(page: unknown, allowedDatabaseIds: readonly string[]): boolean {
+  if (!isRecord(page) || !isRecord(page.parent)) return false;
+  const { parent } = page;
+
+  if ((parent.type !== 'data_source_id' && parent.type !== 'database_id') || typeof parent.database_id !== 'string') {
+    return false;
+  }
+
+  const databaseId = normalizeNotionId(parent.database_id);
+  return allowedDatabaseIds.some((allowedId) => normalizeNotionId(allowedId) === databaseId);
+}
+
+async function resolveParentPage(notion: NotionImageClient, block: unknown): Promise<unknown | null> {
+  let current = block;
+  const visitedBlockIds = new Set<string>();
+
+  while (isRecord(current) && isRecord(current.parent)) {
+    const { parent } = current;
+
+    if (parent.type === 'page_id' && typeof parent.page_id === 'string') {
+      return notion.pages.retrieve({ page_id: parent.page_id });
+    }
+
+    if (parent.type !== 'block_id' || typeof parent.block_id !== 'string' || visitedBlockIds.has(parent.block_id)) {
+      return null;
+    }
+
+    visitedBlockIds.add(parent.block_id);
+    current = await notion.blocks.retrieve({ block_id: parent.block_id });
+  }
+
+  return null;
+}
+
+export async function resolveBlockImageUrl(notion: NotionImageClient, blockId: string, allowedDatabaseIds: readonly string[]): Promise<string | null> {
   const block = await notion.blocks.retrieve({ block_id: blockId });
 
   if (!isRecord(block) || block.type !== 'image') return null;
+  const parentPage = await resolveParentPage(notion, block);
+  if (!belongsToAllowedDatabase(parentPage, allowedDatabaseIds)) return null;
+
   return getFileUrl(block.image);
 }
 
-export async function resolvePageThumbnailUrl(notion: NotionImageClient, pageId: string): Promise<string | null> {
+export async function resolvePageThumbnailUrl(notion: NotionImageClient, pageId: string, allowedDatabaseIds: readonly string[]): Promise<string | null> {
   const page = await notion.pages.retrieve({ page_id: pageId });
 
-  if (!isRecord(page) || !isRecord(page.properties)) return null;
+  if (!belongsToAllowedDatabase(page, allowedDatabaseIds) || !isRecord(page) || !isRecord(page.properties)) return null;
   const thumbnail = page.properties.thumbnail;
   if (!isRecord(thumbnail) || thumbnail.type !== 'files' || !Array.isArray(thumbnail.files)) return null;
 

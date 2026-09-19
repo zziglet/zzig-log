@@ -2,6 +2,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { NotionImageClient, resolveBlockImageUrl, resolvePageThumbnailUrl, serveNotionImage } from '../notion-image.service';
 import { NOTION_IMAGE_CACHE_CONTROL } from '@/utils/notion-image';
 
+const ALLOWED_DATABASE_ID = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
+
 function createClient(): NotionImageClient {
   return {
     blocks: { retrieve: vi.fn() },
@@ -19,14 +21,19 @@ describe('Notion image resolution', () => {
     vi.mocked(notion.blocks.retrieve).mockResolvedValue({
       type: 'image',
       image: { type: 'file', file: { url: 'https://notion.example/new-block-url' } },
+      parent: { type: 'page_id', page_id: 'page-id' },
+    });
+    vi.mocked(notion.pages.retrieve).mockResolvedValue({
+      parent: { type: 'data_source_id', database_id: ALLOWED_DATABASE_ID },
     });
 
-    await expect(resolveBlockImageUrl(notion, 'block-id')).resolves.toBe('https://notion.example/new-block-url');
+    await expect(resolveBlockImageUrl(notion, 'block-id', [ALLOWED_DATABASE_ID])).resolves.toBe('https://notion.example/new-block-url');
   });
 
   it('resolves the latest thumbnail URL from a page', async () => {
     const notion = createClient();
     vi.mocked(notion.pages.retrieve).mockResolvedValue({
+      parent: { type: 'data_source_id', database_id: ALLOWED_DATABASE_ID },
       properties: {
         thumbnail: {
           type: 'files',
@@ -35,7 +42,7 @@ describe('Notion image resolution', () => {
       },
     });
 
-    await expect(resolvePageThumbnailUrl(notion, 'page-id')).resolves.toBe('https://notion.example/new-thumbnail-url');
+    await expect(resolvePageThumbnailUrl(notion, 'page-id', [ALLOWED_DATABASE_ID])).resolves.toBe('https://notion.example/new-thumbnail-url');
   });
 
   it('returns null for non-image resources', async () => {
@@ -43,8 +50,45 @@ describe('Notion image resolution', () => {
     vi.mocked(notion.blocks.retrieve).mockResolvedValue({ type: 'paragraph' });
     vi.mocked(notion.pages.retrieve).mockResolvedValue({ properties: {} });
 
-    await expect(resolveBlockImageUrl(notion, 'block-id')).resolves.toBeNull();
-    await expect(resolvePageThumbnailUrl(notion, 'page-id')).resolves.toBeNull();
+    await expect(resolveBlockImageUrl(notion, 'block-id', [ALLOWED_DATABASE_ID])).resolves.toBeNull();
+    await expect(resolvePageThumbnailUrl(notion, 'page-id', [ALLOWED_DATABASE_ID])).resolves.toBeNull();
+  });
+
+  it('rejects images outside the configured content databases', async () => {
+    const notion = createClient();
+    vi.mocked(notion.blocks.retrieve).mockResolvedValue({
+      type: 'image',
+      image: { type: 'file', file: { url: 'https://notion.example/private-block-url' } },
+      parent: { type: 'page_id', page_id: 'private-page-id' },
+    });
+    vi.mocked(notion.pages.retrieve).mockResolvedValue({
+      parent: { type: 'data_source_id', database_id: 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb' },
+      properties: {
+        thumbnail: {
+          type: 'files',
+          files: [{ type: 'file', file: { url: 'https://notion.example/private-thumbnail-url' } }],
+        },
+      },
+    });
+
+    await expect(resolveBlockImageUrl(notion, 'block-id', [ALLOWED_DATABASE_ID])).resolves.toBeNull();
+    await expect(resolvePageThumbnailUrl(notion, 'private-page-id', [ALLOWED_DATABASE_ID])).resolves.toBeNull();
+  });
+
+  it('walks nested block parents before authorizing an image', async () => {
+    const notion = createClient();
+    vi.mocked(notion.blocks.retrieve)
+      .mockResolvedValueOnce({
+        type: 'image',
+        image: { type: 'file', file: { url: 'https://notion.example/nested-image-url' } },
+        parent: { type: 'block_id', block_id: 'parent-block-id' },
+      })
+      .mockResolvedValueOnce({ parent: { type: 'page_id', page_id: 'page-id' } });
+    vi.mocked(notion.pages.retrieve).mockResolvedValue({
+      parent: { type: 'database_id', database_id: ALLOWED_DATABASE_ID.replaceAll('-', '') },
+    });
+
+    await expect(resolveBlockImageUrl(notion, 'block-id', [ALLOWED_DATABASE_ID])).resolves.toBe('https://notion.example/nested-image-url');
   });
 });
 

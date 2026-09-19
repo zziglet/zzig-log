@@ -31,6 +31,10 @@ export function getPortfolioDbId(): string {
   return getRequiredEnv('NOTION_DB_PORTFOLIO_ID');
 }
 
+export function getContentDatabaseIds(): string[] {
+  return [getBlogDbId(), getPortfolioDbId()];
+}
+
 export function getDataSourceId(dbResponse: unknown): string | undefined {
   const record = dbResponse as Record<string, unknown>;
   const dataSources = record.data_sources;
