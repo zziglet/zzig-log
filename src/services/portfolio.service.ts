@@ -5,6 +5,7 @@ import { getDataSourceId, getNotionClient, getPortfolioDbId, isFullPage, parsePo
 import { PortfolioDetail, PortfolioPost } from '@/types/portfolio';
 import { REVALIDATE_DETAIL, REVALIDATE_LIST } from '@/constants/cache';
 import { registerImageTransformer } from '@/utils/notion-transformers';
+import { toMarkdownContent } from '@/utils/notion-markdown';
 
 function createMarkdownClient() {
   const n2m = new NotionToMarkdown({ notionClient: getNotionClient() });
@@ -68,11 +69,10 @@ const fetchPortfolioPost = unstable_cache(
     }
 
     const metaData = parsePortfolioPage(pageResponse as PageObjectResponse);
-    const mdString = n2m.toMarkdownString(mdBlocks);
 
     return {
       ...metaData,
-      content: mdString.parent,
+      content: toMarkdownContent(n2m, mdBlocks),
     };
   },
   ['portfolio-detail'],
