@@ -14,7 +14,6 @@ import { RiGithubFill, RiGlobalLine, RiShareLine } from '@remixicon/react';
 
 import { useToast } from '@/components/common/Toast';
 import { copyToClipboard } from '@/utils/clipboard';
-import GiscusComments from '@/components/comments/GiscusComments';
 
 const Container = styled.div`
   display: flex;
@@ -140,7 +139,6 @@ function PortfolioDetailContent({ post }: PortfolioDetailContentProps) {
         </ReactMarkdown>
       </MarkdownBody>
 
-      <GiscusComments pagePath={`/portfolio/${id}`} pageTitle={title} />
       {ToastUI}
     </Container>
   );
