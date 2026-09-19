@@ -1,5 +1,6 @@
 import { NotionToMarkdown } from 'notion-to-md';
 import { ListBlockChildrenResponseResult } from 'notion-to-md/build/types';
+import { getNotionBlockImagePath } from '@/utils/notion-image';
 
 type ImageBlock = ListBlockChildrenResponseResult & {
   type: 'image';
@@ -23,7 +24,7 @@ function isImageBlock(block: ListBlockChildrenResponseResult): block is ImageBlo
 
 function getImageUrl(block: ImageBlock): string {
   if (block.image.type === 'file') {
-    return block.image.file?.url ?? '';
+    return getNotionBlockImagePath(block.id);
   }
   return block.image.external?.url ?? '';
 }

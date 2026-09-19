@@ -3,6 +3,7 @@ import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import { PortfolioPost } from '@/types/portfolio';
 import { BlogPost } from '@/types/blog';
 import { formatDate } from './format';
+import { getNotionPageThumbnailPath } from './notion-image';
 
 function getRequiredEnv(name: 'NOTION_API_KEY' | 'NOTION_DB_BLOG_ID' | 'NOTION_DB_PORTFOLIO_ID'): string {
   const value = process.env[name];
@@ -84,11 +85,11 @@ function getUrl(props: NotionProperties, key: string): string | null {
   return prop?.type === 'url' ? prop.url : null;
 }
 
-function getFileThumbnail(props: NotionProperties, key: string): string | null {
+function getFileThumbnail(props: NotionProperties, key: string, pageId: string): string | null {
   const prop = props[key];
   if (prop?.type !== 'files' || !prop.files[0]) return null;
   const file = prop.files[0];
-  return file.type === 'file' ? file.file.url : file.type === 'external' ? file.external.url : null;
+  return file.type === 'file' ? getNotionPageThumbnailPath(pageId) : file.type === 'external' ? file.external.url : null;
 }
 
 export function parseBlogPost(post: PageObjectResponse): BlogPost {
@@ -101,7 +102,7 @@ export function parseBlogPost(post: PageObjectResponse): BlogPost {
     subtitle: getRichText(props, 'subtitle'),
     category: getSelect(props, 'category', 'Uncategorized'),
     tags: getMultiSelect(props, 'tags'),
-    thumbnail: getFileThumbnail(props, 'thumbnail'),
+    thumbnail: getFileThumbnail(props, 'thumbnail', post.id),
     date: formatDate(date?.start ?? post.created_time),
   };
 }
@@ -114,7 +115,7 @@ export function parsePortfolioPage(post: PageObjectResponse): PortfolioPost {
     id: post.id,
     title: getTitle(props, 'content', '프로젝트명 없음'),
     description: getRichText(props, 'description'),
-    thumbnail: getFileThumbnail(props, 'thumbnail'),
+    thumbnail: getFileThumbnail(props, 'thumbnail', post.id),
     category: getSelect(props, 'category', 'Etc'),
     tags: getMultiSelect(props, 'tags'),
     githubUrl: getUrl(props, 'github'),
