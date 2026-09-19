@@ -2,19 +2,16 @@
 
 import Image from 'next/image';
 import styled from '@emotion/styled';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import rehypeRaw from 'rehype-raw';
 import { PortfolioDetail } from '@/types/portfolio';
 import { theme } from '@/styles/theme';
 import TagList from '@/components/common/TagList';
 import CategoryBadge from '@/components/common/CategoryBadge';
-import { MarkdownBody, DetailMainTitle, DetailSubTitle, DetailDateBadge, DetailIconButton, DetailIconLink } from '@/styles/shared.styles';
+import { DetailMainTitle, DetailSubTitle, DetailDateBadge, DetailIconButton, DetailIconLink } from '@/styles/shared.styles';
 import { RiGithubFill, RiGlobalLine, RiShareLine } from '@remixicon/react';
 
 import { useToast } from '@/components/common/Toast';
 import { copyToClipboard } from '@/utils/clipboard';
-import GiscusComments from '@/components/comments/GiscusComments';
+import PortfolioMarkdownContent from '@/components/portfolio/PortfolioMarkdownContent';
 
 const Container = styled.div`
   display: flex;
@@ -134,13 +131,8 @@ function PortfolioDetailContent({ post }: PortfolioDetailContentProps) {
         <TagList tags={tags} />
       </MetaSection>
 
-      <MarkdownBody>
-        <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
-          {content}
-        </ReactMarkdown>
-      </MarkdownBody>
+      <PortfolioMarkdownContent content={content} />
 
-      <GiscusComments pagePath={`/portfolio/${id}`} pageTitle={title} />
       {ToastUI}
     </Container>
   );
