@@ -11,11 +11,11 @@ export const PERSONAL_INFO = {
 };
 
 export const CAREER_HISTORY = [
-  { period: '2024.09 ~ 2025.06', role: 'GDGoC Konkuk 24-25 season Member' },
-  { period: '2025.06 ~ 2025.08', role: '건국대학교 학생개발팀 4기 Web Developer' },
-  { period: '2025.04 ~ ing', role: '인와이즈 Front-end Developer' },
-  { period: '2025.07 ~ ing', role: 'GDGoC Konkuk 25-26 season Core' },
   { period: '2025.09 ~ ing', role: 'KioSchool Front-end Developer' },
+  { period: '2025.07 ~ 2026.06', role: 'GDGoC Konkuk 25-26 season Core' },
+  { period: '2025.12 ~ 2026.02', role: '유머스트알엔디 Mobile App Engineer' },
+  { period: '2025.04 ~ 2025.12', role: '인와이즈 Frontend Developer' },
+  { period: '2025.06 ~ 2025.08', role: '건국대학교 학생개발팀 4기 Web Developer' },
 ];
 
 export const LINKS = {
